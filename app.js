@@ -841,24 +841,14 @@ const MOTIVATION_INSIGHTS = [
 let state = {
     currentDay: 1,
     completedDays: [],
-    shorthandLogs: [
-        { date: '2026-07-10', speed: 120, accuracy: 95 },
-        { date: '2026-07-12', speed: 120, accuracy: 96 },
-        { date: '2026-07-15', speed: 122, accuracy: 95 },
-        { date: '2026-07-18', speed: 120, accuracy: 97 }
-    ],
-    typingLogs: [
-        { date: '2026-07-10', wpm: 50, accuracy: 96 },
-        { date: '2026-07-12', wpm: 51, accuracy: 97 },
-        { date: '2026-07-15', wpm: 52, accuracy: 98 },
-        { date: '2026-07-18', wpm: 50, accuracy: 99 }
-    ]
+    shorthandLogs: [],
+    typingLogs: []
 };
 
 // Load state from local storage
 function loadState() {
     try {
-        const saved = localStorage.getItem('bps16_prep_state');
+        const saved = localStorage.getItem('bps16_prep_state_v2');
         if (saved) {
             state = JSON.parse(saved);
         }
@@ -870,7 +860,7 @@ function loadState() {
 // Save state to local storage
 function saveState() {
     try {
-        localStorage.setItem('bps16_prep_state', JSON.stringify(state));
+        localStorage.setItem('bps16_prep_state_v2', JSON.stringify(state));
     } catch (e) {
         console.warn("LocalStorage write failed. Session changes will reset upon page reload.");
     }
