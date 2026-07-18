@@ -1334,7 +1334,7 @@ function initProtocolCenter() {
     All administrative departments are requested to bring these instructions to the attention of all staff concerned for strict compliance.
 </p>
 <div style="float: right; text-align: center; width: 250px; margin-top: 30px;">
-    <strong>( ARSLAN ARRAR )</strong><br>
+    <strong>( ABDUL HALEEM ASGHAR )</strong><br>
     Section Officer (Admn)<br>
     Ph: 051-9200000
 </div>
