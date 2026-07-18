@@ -902,6 +902,10 @@ function setupTabs() {
             
             if (targetId === 'analytics') {
                 renderCharts();
+            } else if (targetId === 'typing') {
+                setTimeout(() => {
+                    document.getElementById('typing-passage-container')?.focus();
+                }, 50);
             }
         });
     });
@@ -1211,37 +1215,187 @@ let drillActive = false;
 
 function initTypingDrill() {
     const drillText = document.getElementById('typing-passage-text');
-    const inputArea = document.getElementById('typing-drill-input');
+    const typingContainer = document.getElementById('typing-passage-container');
     const resetBtn = document.getElementById('btn-reset-drill');
     const wpmResult = document.getElementById('drill-wpm');
     const accResult = document.getElementById('drill-acc');
     
-    if (!drillText || !inputArea) return;
+    if (!drillText || !typingContainer) return;
+    
+    let currentMode = 'passage'; // 'passage' or 'row'
+    let currentRowFocus = 'homerow'; // homerow, toprow, bottomrow, allrows
+    let currentDrillText = '';
+    
+    // Keybr-style random drills generator
+    function generateRowDrillText(level) {
+        const keysMap = {
+            homerow: ['a', 's', 'd', 'f', 'j', 'k', 'l', ';'],
+            toprow: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            bottomrow: ['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.'],
+            allrows: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.']
+        };
+        
+        const keys = keysMap[level] || keysMap.homerow;
+        let resultWords = [];
+        
+        for (let w = 0; w < 20; w++) {
+            let wordLen = Math.floor(Math.random() * 3) + 3; // length 3 to 5
+            let word = '';
+            for (let c = 0; c < wordLen; c++) {
+                const randomKey = keys[Math.floor(Math.random() * keys.length)];
+                word += randomKey;
+            }
+            resultWords.push(word);
+        }
+        return resultWords.join(' ');
+    }
+    
+    function getActiveText() {
+        if (currentMode === 'passage') {
+            return TYPING_PASSAGES[currentPassageIndex];
+        } else {
+            if (!currentDrillText) {
+                currentDrillText = generateRowDrillText(currentRowFocus);
+            }
+            return currentDrillText;
+        }
+    }
+    
+    function getKeyIdFromEvent(e) {
+        if (!e) return '';
+        let code = '';
+        let key = '';
+        if (e && typeof e === 'object') {
+            code = e.code;
+            key = e.key;
+        } else {
+            key = e;
+        }
+        
+        if (code) {
+            if (code === 'Space') return 'key-space';
+            if (code === 'Backspace') return 'key-backspace';
+            if (code === 'Tab') return 'key-tab';
+            if (code === 'CapsLock') return 'key-capslock';
+            if (code === 'Enter') return 'key-enter';
+            if (code === 'ShiftLeft') return 'key-shiftleft';
+            if (code === 'ShiftRight') return 'key-shiftright';
+            if (code === 'ControlLeft') return 'key-controlleft';
+            if (code === 'ControlRight') return 'key-controlright';
+            if (code === 'AltLeft') return 'key-altleft';
+            if (code === 'AltRight') return 'key-altright';
+            if (code === 'MetaLeft') return 'key-metaleft';
+            if (code === 'MetaRight') return 'key-metaright';
+        }
+        
+        const lowerKey = (key || '').toLowerCase();
+        if (lowerKey === '`' || lowerKey === '~') return 'key-backtick';
+        if (lowerKey === '-') return 'key-minus';
+        if (lowerKey === '=') return 'key-equal';
+        if (lowerKey === '[') return 'key-bracketleft';
+        if (lowerKey === ']') return 'key-bracketright';
+        if (lowerKey === '\\') return 'key-backslash';
+        if (lowerKey === ';') return 'key-semi';
+        if (lowerKey === '\'') return 'key-quote';
+        if (lowerKey === ',') return 'key-comma';
+        if (lowerKey === '.') return 'key-period';
+        if (lowerKey === '/') return 'key-slash';
+        if (lowerKey === ' ') return 'key-space';
+        
+        return 'key-' + lowerKey;
+    }
+    
+    function highlightNextKey(char) {
+        document.querySelectorAll('.kb-key').forEach(key => {
+            key.classList.remove('highlighted');
+        });
+        
+        if (!char) return;
+        
+        // Auto-highlight Shift key if next letter is capital
+        const isUppercase = (char >= 'A' && char <= 'Z');
+        if (isUppercase) {
+            // Touch typing rules: Left hand keys -> Right Shift, Right hand keys -> Left Shift
+            const leftHandCapitals = ['Q', 'W', 'E', 'R', 'T', 'A', 'S', 'D', 'F', 'G', 'Z', 'X', 'C', 'V', 'B'];
+            if (leftHandCapitals.includes(char)) {
+                document.getElementById('key-shiftright')?.classList.add('highlighted');
+            } else {
+                document.getElementById('key-shiftleft')?.classList.add('highlighted');
+            }
+        }
+        
+        const targetId = getKeyIdFromEvent(char);
+        const targetKey = document.getElementById(targetId);
+        if (targetKey) {
+            targetKey.classList.add('highlighted');
+        }
+    }
     
     function resetDrill() {
         characterIndex = 0;
         typingErrors = 0;
         typingStartTime = null;
         drillActive = false;
-        inputArea.value = '';
         wpmResult.innerText = '0';
         accResult.innerText = '100%';
         
+        const activeText = getActiveText();
+        
         // Render characters
-        const text = TYPING_PASSAGES[currentPassageIndex];
-        drillText.innerHTML = text.split('').map((char, index) => {
+        drillText.innerHTML = activeText.split('').map((char, index) => {
             return `<span class="${index === 0 ? 'current' : ''}">${char}</span>`;
         }).join('');
+        
+        highlightNextKey(activeText[0]);
     }
     
-    // Choose other passages
-    document.getElementById('btn-next-passage')?.addEventListener('click', () => {
-        const typedVal = inputArea.value;
-        if (typedVal.length >= 10 && typingStartTime) {
+    // Toggle Modes Listeners
+    const modePassageBtn = document.getElementById('btn-mode-passage');
+    const modeRowBtn = document.getElementById('btn-mode-row');
+    const rowControls = document.getElementById('row-drill-controls');
+    const rowSelect = document.getElementById('row-drill-level');
+    const drillModeLabel = document.getElementById('drill-mode-label');
+    const nextPassageBtn = document.getElementById('btn-next-passage');
+    
+    modePassageBtn?.addEventListener('click', () => {
+        if (currentMode === 'passage') return;
+        currentMode = 'passage';
+        modePassageBtn.classList.add('active');
+        modeRowBtn.classList.remove('active');
+        rowControls.classList.add('d-none');
+        drillModeLabel.innerText = "Mode: Passage Practice";
+        nextPassageBtn.innerText = "Change Passage";
+        resetDrill();
+        typingContainer.focus();
+    });
+    
+    modeRowBtn?.addEventListener('click', () => {
+        if (currentMode === 'row') return;
+        currentMode = 'row';
+        modeRowBtn.classList.add('active');
+        modePassageBtn.classList.remove('active');
+        rowControls.classList.remove('d-none');
+        drillModeLabel.innerText = "Mode: Row Touch Typing";
+        nextPassageBtn.innerText = "New Row Drill";
+        currentDrillText = '';
+        resetDrill();
+        typingContainer.focus();
+    });
+    
+    rowSelect?.addEventListener('change', () => {
+        currentRowFocus = rowSelect.value;
+        currentDrillText = '';
+        resetDrill();
+        typingContainer.focus();
+    });
+    
+    // Next/Change Passage Button
+    nextPassageBtn?.addEventListener('click', () => {
+        if (characterIndex >= 10 && typingStartTime) {
             const timeDiffMin = (new Date() - typingStartTime) / 60000;
-            const grossWpm = Math.round((typedVal.length / 5) / (timeDiffMin || 0.01));
+            const grossWpm = Math.round((characterIndex / 5) / (timeDiffMin || 0.01));
             const netWpm = Math.max(0, grossWpm - Math.round(typingErrors / (timeDiffMin || 0.01)));
-            const accuracy = Math.round(((typedVal.length - typingErrors) / typedVal.length) * 100);
+            const accuracy = Math.round(((characterIndex - typingErrors) / characterIndex) * 100);
             
             const date = new Date().toISOString().split('T')[0];
             state.typingLogs.push({ date, wpm: netWpm, accuracy });
@@ -1249,72 +1403,140 @@ function initTypingDrill() {
             updateLogTables();
             showToast(`Logged attempt before changing: ${netWpm} WPM | Acc: ${accuracy}%`);
         }
-        currentPassageIndex = (currentPassageIndex + 1) % TYPING_PASSAGES.length;
+        
+        if (currentMode === 'passage') {
+            currentPassageIndex = (currentPassageIndex + 1) % TYPING_PASSAGES.length;
+        } else {
+            currentDrillText = generateRowDrillText(currentRowFocus);
+        }
         resetDrill();
-        showToast("Loaded new drill passage!");
+        showToast(currentMode === 'passage' ? "Loaded new drill passage!" : "Regenerated row drill characters!");
+        typingContainer.focus();
     });
     
-    inputArea.addEventListener('input', (e) => {
-        const textSpans = drillText.querySelectorAll('span');
-        const typedVal = inputArea.value;
-        
-        if (!typingStartTime && typedVal.length > 0) {
-            typingStartTime = new Date();
-            drillActive = true;
-        }
-        
-        characterIndex = typedVal.length;
-        
-        // Calculate WPM and Accuracy
-        const text = TYPING_PASSAGES[currentPassageIndex];
-        typingErrors = 0;
-        
-        for (let i = 0; i < textSpans.length; i++) {
-            if (i < typedVal.length) {
-                if (typedVal[i] === text[i]) {
-                    textSpans[i].className = 'correct';
+    // Auto-focus container when clicking inside the test card
+    document.querySelector('.typing-test-box')?.addEventListener('click', () => {
+        typingContainer.focus();
+    });
+    
+    // Listen to keypresses on the container (type directly)
+    typingContainer.addEventListener('keydown', (e) => {
+        // Caps Lock sync
+        if (e.getModifierState) {
+            const capsEl = document.getElementById('key-capslock');
+            if (capsEl) {
+                if (e.getModifierState('CapsLock')) {
+                    capsEl.classList.add('pressed');
                 } else {
-                    textSpans[i].className = 'incorrect';
-                    typingErrors++;
+                    capsEl.classList.remove('pressed');
                 }
-            } else if (i === typedVal.length) {
-                textSpans[i].className = 'current';
-            } else {
-                textSpans[i].className = '';
             }
         }
-        
-        // Update stats
-        if (typedVal.length > 0) {
-            const timeDiffMin = (new Date() - typingStartTime) / 60000;
-            const grossWpm = Math.round((typedVal.length / 5) / (timeDiffMin || 0.01));
-            const netWpm = Math.max(0, grossWpm - Math.round(typingErrors / (timeDiffMin || 0.01)));
-            const accuracy = Math.round(((typedVal.length - typingErrors) / typedVal.length) * 100);
-            
-            wpmResult.innerText = netWpm;
-            accResult.innerText = `${accuracy}%`;
-            
-            // Finish Condition
-            if (typedVal.length >= text.length) {
-                drillActive = false;
-                showToast(`Drill complete! net speed: ${netWpm} WPM | Acc: ${accuracy}%`);
-                
-                // Add to typing log automatically
-                const date = new Date().toISOString().split('T')[0];
-                state.typingLogs.push({ date, wpm: netWpm, accuracy });
-                saveState();
-                updateLogTables();
+
+        // Prevent default actions for standard keys (like space bar scroll)
+        if (e.key === ' ' || e.key === 'Backspace' || (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey)) {
+            e.preventDefault();
+        } else {
+            // Shift, CapsLock, Ctrl, Tab etc. visual keypress highlights
+            const targetId = getKeyIdFromEvent(e);
+            const keyEl = document.getElementById(targetId);
+            if (keyEl) {
+                keyEl.classList.add('pressed');
             }
+            return;
+        }
+        
+        const targetId = getKeyIdFromEvent(e);
+        const keyEl = document.getElementById(targetId);
+        if (keyEl) {
+            keyEl.classList.add('pressed');
+        }
+        
+        const text = getActiveText();
+        const textSpans = drillText.querySelectorAll('span');
+        
+        if (e.key === 'Backspace') {
+            if (characterIndex > 0) {
+                characterIndex--;
+                textSpans[characterIndex].className = 'current';
+                for (let i = characterIndex + 1; i < textSpans.length; i++) {
+                    textSpans[i].className = '';
+                }
+                
+                typingErrors = 0;
+                for (let i = 0; i < characterIndex; i++) {
+                    if (textSpans[i].className === 'incorrect') {
+                        typingErrors++;
+                    }
+                }
+                highlightNextKey(text[characterIndex]);
+            }
+            return;
+        }
+        
+        // Printable character
+        if (e.key.length === 1 && characterIndex < text.length) {
+            if (!typingStartTime && characterIndex === 0) {
+                typingStartTime = new Date();
+                drillActive = true;
+            }
+            
+            const typedChar = e.key;
+            const expectedChar = text[characterIndex];
+            
+            if (typedChar === expectedChar) {
+                textSpans[characterIndex].className = 'correct';
+            } else {
+                textSpans[characterIndex].className = 'incorrect';
+                typingErrors++;
+            }
+            
+            characterIndex++;
+            
+            if (characterIndex < text.length) {
+                textSpans[characterIndex].className = 'current';
+                highlightNextKey(text[characterIndex]);
+            } else {
+                highlightNextKey(null);
+            }
+            
+            // Calculate stats
+            if (characterIndex > 0) {
+                const timeDiffMin = (new Date() - typingStartTime) / 60000;
+                const grossWpm = Math.round((characterIndex / 5) / (timeDiffMin || 0.01));
+                const netWpm = Math.max(0, grossWpm - Math.round(typingErrors / (timeDiffMin || 0.01)));
+                const accuracy = Math.round(((characterIndex - typingErrors) / characterIndex) * 100);
+                
+                wpmResult.innerText = netWpm;
+                accResult.innerText = `${accuracy}%`;
+                
+                if (characterIndex >= text.length) {
+                    drillActive = false;
+                    showToast(`Drill complete! net speed: ${netWpm} WPM | Acc: ${accuracy}%`);
+                    
+                    const date = new Date().toISOString().split('T')[0];
+                    state.typingLogs.push({ date, wpm: netWpm, accuracy });
+                    saveState();
+                    updateLogTables();
+                }
+            }
+        }
+    });
+    
+    typingContainer.addEventListener('keyup', (e) => {
+        const targetId = getKeyIdFromEvent(e);
+        const keyEl = document.getElementById(targetId);
+        if (keyEl) {
+            keyEl.classList.remove('pressed');
         }
     });
     
     resetBtn?.addEventListener('click', () => {
-        const typedVal = inputArea.value;
-        if (typedVal.length >= 10 && typingStartTime) {
+        if (characterIndex >= 10 && typingStartTime) {
             const timeDiffMin = (new Date() - typingStartTime) / 60000;
-            const grossWpm = Math.round((typedVal.length / 5) / (timeDiffMin || 0.01));
+            const grossWpm = Math.round((characterIndex / 5) / (timeDiffMin || 0.01));
             const netWpm = Math.max(0, grossWpm - Math.round(typingErrors / (timeDiffMin || 0.01)));
-            const accuracy = Math.round(((typedVal.length - typingErrors) / typedVal.length) * 100);
+            const accuracy = Math.round(((characterIndex - typingErrors) / characterIndex) * 100);
             
             const date = new Date().toISOString().split('T')[0];
             state.typingLogs.push({ date, wpm: netWpm, accuracy });
@@ -1323,7 +1545,9 @@ function initTypingDrill() {
             showToast(`Logged attempt before reset: ${netWpm} WPM | Acc: ${accuracy}%`);
         }
         resetDrill();
+        typingContainer.focus();
     });
+    
     resetDrill();
 }
 

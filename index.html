@@ -9,6 +9,18 @@
 </head>
 
 <body>
+    <script>
+        window.addEventListener('error', function(e) {
+            let errDiv = document.getElementById('global-error-banner');
+            if (!errDiv) {
+                errDiv = document.createElement('div');
+                errDiv.id = 'global-error-banner';
+                errDiv.style.cssText = 'background: #f43f5e; color: #fff; padding: 15px; font-family: monospace; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; border-bottom: 2px solid #fff; font-size: 14px;';
+                document.body.prepend(errDiv);
+            }
+            errDiv.innerHTML = '<strong>Page Script Error:</strong> ' + e.message + ' <br>File: ' + e.filename + ' Line: ' + e.lineno;
+        });
+    </script>
 
     <div class="container">
         <!-- Global Header -->
@@ -238,56 +250,152 @@
         <div id="typing" class="tab-content">
             <div class="grid-dashboard">
                 <!-- Left: Typing Drill -->
-                <div class="card">
+                <div class="card" style="grid-column: span 2;">
                     <div class="card-title">
-                        <span>Interactive Typing Drill</span>
-                        <button id="btn-next-passage" class="btn-primary"
-                            style="width: auto; padding: 6px 12px; font-size: 0.8rem;">Change Passage</button>
+                        <span>Touch Typing Trainer & Drill Center</span>
                     </div>
-                    <div class="typing-test-box">
-                        <div id="typing-passage-text" class="typing-test-text">
-                            <!-- Typing text loads here with char highlights -->
-                        </div>
-                        <textarea id="typing-drill-input" class="form-control" rows="4"
-                            style="font-family: var(--font-mono); font-size: 1rem; resize: none; margin-top: 15px;"
-                            placeholder="Start typing the text block above here to measure live speed..."></textarea>
 
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                            <div>
-                                <span style="color: var(--text-secondary); margin-right: 15px;">Net WPM: <strong
-                                        id="drill-wpm"
-                                        style="color: var(--accent-cyan); font-size: 1.2rem;">0</strong></span>
-                                <span style="color: var(--text-secondary);">Accuracy: <strong id="drill-acc"
-                                        style="color: var(--accent-emerald); font-size: 1.2rem;">100%</strong></span>
+                    <!-- Mode Selectors -->
+                    <div class="mode-toggles">
+                        <button class="mode-btn active" id="btn-mode-passage">Passage Mode (Exam Focus)</button>
+                        <button class="mode-btn" id="btn-mode-row">Keybr Row Drills (Beginner Touch Typing)</button>
+                    </div>
+
+                    <!-- Row Drill Selector -->
+                    <div id="row-drill-controls" class="form-group d-none" style="margin-bottom: 15px;">
+                        <label for="row-drill-level" style="margin-right: 10px; font-weight: 500;">Select Row Drill Focus:</label>
+                        <select id="row-drill-level" class="form-control" style="width: auto; display: inline-block;">
+                            <option value="homerow">Home Row Only (a, s, d, f, j, k, l, ;)</option>
+                            <option value="toprow">Top Row Only (q, w, e, r, t, y, u, i, o, p)</option>
+                            <option value="bottomrow">Bottom Row Only (z, x, c, v, b, n, m, ,, .)</option>
+                            <option value="allrows">All Rows Mixed Drill</option>
+                        </select>
+                    </div>
+
+                    <div class="typing-test-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="color: var(--accent-gold);" id="drill-mode-label">Mode: Passage Practice</strong>
+                            <button id="btn-next-passage" class="btn-primary" style="width: auto; padding: 6px 12px; font-size: 0.8rem;">Change Passage</button>
+                        </div>
+                        
+                        <div id="typing-passage-container" tabindex="0" class="typing-passage-container" style="outline: none; margin-top: 15px;">
+                            <div id="typing-passage-text" class="typing-test-text">
+                                <!-- Typing text loads here with char highlights -->
                             </div>
-                            <button id="btn-reset-drill" class="btn-primary"
-                                style="width: auto; padding: 8px 16px;">Restart Drill</button>
+                            <div class="typing-hint" style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">
+                                Click here or press any key to start typing directly. Press <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.8rem;">Backspace</kbd> to correct mistakes.
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                            <div>
+                                <span style="color: var(--text-secondary); margin-right: 15px;">Net WPM: <strong id="drill-wpm" style="color: var(--accent-cyan); font-size: 1.2rem;">0</strong></span>
+                                <span style="color: var(--text-secondary);">Accuracy: <strong id="drill-acc" style="color: var(--accent-emerald); font-size: 1.2rem;">100%</strong></span>
+                            </div>
+                            <button id="btn-reset-drill" class="btn-primary" style="width: auto; padding: 8px 16px;">Restart Drill</button>
+                        </div>
+                    </div>
+
+                    <!-- Virtual Keyboard Display -->
+                    <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                        <div style="text-align: center; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">
+                            Keep your eyes on the screen! The key you need to type next is highlighted in <strong style="color: var(--accent-gold);">Gold</strong> below.
+                        </div>
+                        <div class="keyboard-container" id="kb-container">
+                            <!-- Number Row -->
+                            <div class="keyboard-row">
+                                <div class="kb-key" id="key-backtick">`</div>
+                                <div class="kb-key" id="key-1">1</div>
+                                <div class="kb-key" id="key-2">2</div>
+                                <div class="kb-key" id="key-3">3</div>
+                                <div class="kb-key" id="key-4">4</div>
+                                <div class="kb-key" id="key-5">5</div>
+                                <div class="kb-key" id="key-6">6</div>
+                                <div class="kb-key" id="key-7">7</div>
+                                <div class="kb-key" id="key-8">8</div>
+                                <div class="kb-key" id="key-9">9</div>
+                                <div class="kb-key" id="key-0">0</div>
+                                <div class="kb-key" id="key-minus">-</div>
+                                <div class="kb-key" id="key-equal">=</div>
+                                <div class="kb-key wide-backspace" id="key-backspace">Backspace</div>
+                            </div>
+                            <!-- QWERTY Row -->
+                            <div class="keyboard-row">
+                                <div class="kb-key wide-tab" id="key-tab">Tab</div>
+                                <div class="kb-key" id="key-q">q</div>
+                                <div class="kb-key" id="key-w">w</div>
+                                <div class="kb-key" id="key-e">e</div>
+                                <div class="kb-key" id="key-r">r</div>
+                                <div class="kb-key" id="key-t">t</div>
+                                <div class="kb-key" id="key-y">y</div>
+                                <div class="kb-key" id="key-u">u</div>
+                                <div class="kb-key" id="key-i">i</div>
+                                <div class="kb-key" id="key-o">o</div>
+                                <div class="kb-key" id="key-p">p</div>
+                                <div class="kb-key" id="key-bracketleft">[</div>
+                                <div class="kb-key" id="key-bracketright">]</div>
+                                <div class="kb-key wide-backslash" id="key-backslash">\</div>
+                            </div>
+                            <!-- ASDF Row -->
+                            <div class="keyboard-row">
+                                <div class="kb-key wide-caps" id="key-capslock">Caps Lock</div>
+                                <div class="kb-key" id="key-a">a</div>
+                                <div class="kb-key" id="key-s">s</div>
+                                <div class="kb-key" id="key-d">d</div>
+                                <div class="kb-key" id="key-f">f</div>
+                                <div class="kb-key" id="key-g">g</div>
+                                <div class="kb-key" id="key-h">h</div>
+                                <div class="kb-key" id="key-j">j</div>
+                                <div class="kb-key" id="key-k">k</div>
+                                <div class="kb-key" id="key-l">l</div>
+                                <div class="kb-key" id="key-semi">;</div>
+                                <div class="kb-key" id="key-quote">'</div>
+                                <div class="kb-key wide-enter" id="key-enter">Enter</div>
+                            </div>
+                            <!-- ZXCV Row -->
+                            <div class="keyboard-row">
+                                <div class="kb-key wide-shift-left" id="key-shiftleft">Shift</div>
+                                <div class="kb-key" id="key-z">z</div>
+                                <div class="kb-key" id="key-x">x</div>
+                                <div class="kb-key" id="key-c">c</div>
+                                <div class="kb-key" id="key-v">v</div>
+                                <div class="kb-key" id="key-b">b</div>
+                                <div class="kb-key" id="key-n">n</div>
+                                <div class="kb-key" id="key-m">m</div>
+                                <div class="kb-key" id="key-comma">,</div>
+                                <div class="kb-key" id="key-period">.</div>
+                                <div class="kb-key" id="key-slash">/</div>
+                                <div class="kb-key wide-shift-right" id="key-shiftright">Shift</div>
+                            </div>
+                            <!-- Spacebar Row -->
+                            <div class="keyboard-row">
+                                <div class="kb-key wide-control" id="key-controlleft">Ctrl</div>
+                                <div class="kb-key wide-meta" id="key-metaleft">Win</div>
+                                <div class="kb-key wide-alt" id="key-altleft">Alt</div>
+                                <div class="kb-key spacebar" id="key-space">space</div>
+                                <div class="kb-key wide-alt" id="key-altright">Alt</div>
+                                <div class="kb-key wide-meta" id="key-metaright">Win</div>
+                                <div class="kb-key wide-control" id="key-controlright">Ctrl</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Drill Guidelines -->
-                <div class="card">
-                    <div class="card-title">Shorthand & Keyboard Tips</div>
-                    <div
-                        style="display: flex; flex-direction: column; gap: 15px; font-size: 0.95rem; color: var(--text-secondary);">
+                <!-- Guidelines Card (shifted to full width below or floating) -->
+                <div class="card" style="grid-column: span 2; margin-top: 15px;">
+                    <div class="card-title">Shorthand & Keyboard Practice Guidelines</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; font-size: 0.95rem; color: var(--text-secondary);">
                         <div>
                             <strong style="color: var(--accent-emerald);">Shorthand Transcription Routine:</strong>
-                            <p style="margin-top: 4px;">Listen to 120 WPM dictation for 5 minutes. Transcribe
-                                immediately onto PC. Count your omissions and spellings. Aim for less than 1.5% outline
-                                errors.</p>
+                            <p style="margin-top: 4px;">Listen to 120 WPM dictation for 5 minutes. Transcribe immediately onto PC. Count your omissions and spellings. Aim for less than 1.5% outline errors.</p>
                         </div>
                         <div>
-                            <strong style="color: var(--accent-cyan);">Keyboard Speed Building:</strong>
-                            <p style="margin-top: 4px;">Avoid looking down at keys. Keep fingers placed on home row
-                                (ASDF JKL;). Try typing drills with a lightweight cloth covering your hands to solidify
-                                muscle memory.</p>
+                            <strong style="color: var(--accent-cyan);">Keyboard Touch Typing Rules:</strong>
+                            <p style="margin-top: 4px;">Never look at your hands! If you get stuck, look at the virtual keyboard display above. Rest index fingers on F and J (homing bumps) and use correct fingers for other keys.</p>
                         </div>
                         <div>
-                            <strong style="color: var(--accent-gold);">SECRETARIAT SPEED TEST REQ:</strong>
-                            <p style="margin-top: 4px;">Shorthand speed tests are dictate-and-transcribe. A typing test
-                                follows. Maintaining continuous typing flow is key to preventing keyboard stalling.</p>
+                            <strong style="color: var(--accent-gold);">Aiwan-e-Sadr Exam Strategy:</strong>
+                            <p style="margin-top: 4px;">Secretariat speed tests are strict. Practice daily row drills to push muscle memory so typing words becomes an automatic reflex during shorthand translation.</p>
                         </div>
                     </div>
                 </div>
