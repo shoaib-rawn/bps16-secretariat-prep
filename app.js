@@ -814,11 +814,18 @@ const SYLLABUS = [
     }
 ];
 
-// 2. Typing Practice Passages for Custom Drill
+// 2. Typing Practice Passages for Custom Drill (10 Passages Total)
 const TYPING_PASSAGES = [
     "The President's Secretariat, Aiwan-e-Sadr, functions as the administrative core for the head of state, coordinating official state affairs, diplomatic receptions, and statutory declarations. As an Assistant Private Secretary, precision in official communication, speed in shorthand dictation, and mastery over file management systems are core prerequisites for managing the workflow of high-ranking government officials.",
     "Microsoft Word section breaks are fundamental tools for crafting professional reports. They allow the author to divide a document into segments that can have distinct page numbering formats, header templates, and orientation margins. Without section breaks, uncoupling a title page or inserting landscape sheets within a portrait dossier is impossible, which is why examiners focus heavily on this topic.",
-    "Excel spreadsheet models are widely deployed in ministries to track budgets, personnel registers, and monthly allocations. Private secretaries are expected to know lookup functions like INDEX and MATCH, logical calculations using nested IFS, and pivot summaries. Ensuring proper print layouts with repeating title rows is critical to creating clean reports for executive reviews."
+    "Excel spreadsheet models are widely deployed in ministries to track budgets, personnel registers, and monthly allocations. Private secretaries are expected to know lookup functions like INDEX and MATCH, logical calculations using nested IFS, and pivot summaries. Ensuring proper print layouts with repeating title rows is critical to creating clean reports for executive reviews.",
+    "Pitman shorthand, developed by Sir Isaac Pitman in eighteen thirty-seven, is a phonetic outline writing system based on geometric lines and curves. It uses thin and thick strokes representing voiced and unvoiced consonants, and specific vowel indicators. Master private secretaries memorize thousands of word forms and contraction rules to comfortably capture spoken dictations at rates exceeding one hundred and twenty words per minute.",
+    "The Rules of Business, nineteen seventy-three, outline standard government operating procedures in Pakistan. Every administrative file travels from Section Officers through Assistant Secretaries, Joint Secretaries, and finally the Secretary. The Private Secretary handles scheduling, records incoming and outgoing mail in the diary register, drafts notices, and maintains absolute file confidentiality.",
+    "Mail Merge field codes in MS Word are surrounded by double chevron symbols. They act as placeholders that link directly to database queries. You can execute high-volume print runs of administrative notices or certificates by compiling Excel directories with custom greeting fields. Incorporating rules like checking blank records ensures letters look manually written.",
+    "Excel Pivot Tables are interactive data summarizing engines. They enable data analysts to group dates, sum financial expenditures across distinct offices, and create customized reporting dashboards. Inserting a slicer visual component provides a professional button layout to sort records, which is critical during ministerial budget reviews.",
+    "Slide Master view in PowerPoint allows you to modify the global theme, background graphics, and fonts. Setting standard layouts ensures that every presenter in the Secretariat delivers slides under unified branding. The slide sorter allows the private secretary to rapidly group, reorder, or section presentation files.",
+    "Advanced keyboard straight typing requires correct hand posture and tactile feedback. By resting index fingers on the F and J keys, typists build muscle memory for letters. A relaxed wrist posture, steady typing cadence, and typing without looking down at the keyboard are essential traits for exceeding sixty words per minute.",
+    "Official government communications require structured document layouts. An Office Memorandum is written in the third person and is used to circulate policy details across ministries. In contrast, an Office Order deals with internal actions such as postings, leaf approvals, or transfers, and is distributed to auditing offices."
 ];
 
 // 3. Motivational Quotes & Guidance
@@ -1229,6 +1236,19 @@ function initTypingDrill() {
     
     // Choose other passages
     document.getElementById('btn-next-passage')?.addEventListener('click', () => {
+        const typedVal = inputArea.value;
+        if (typedVal.length >= 10 && typingStartTime) {
+            const timeDiffMin = (new Date() - typingStartTime) / 60000;
+            const grossWpm = Math.round((typedVal.length / 5) / (timeDiffMin || 0.01));
+            const netWpm = Math.max(0, grossWpm - Math.round(typingErrors / (timeDiffMin || 0.01)));
+            const accuracy = Math.round(((typedVal.length - typingErrors) / typedVal.length) * 100);
+            
+            const date = new Date().toISOString().split('T')[0];
+            state.typingLogs.push({ date, wpm: netWpm, accuracy });
+            saveState();
+            updateLogTables();
+            showToast(`Logged attempt before changing: ${netWpm} WPM | Acc: ${accuracy}%`);
+        }
         currentPassageIndex = (currentPassageIndex + 1) % TYPING_PASSAGES.length;
         resetDrill();
         showToast("Loaded new drill passage!");
@@ -1288,7 +1308,22 @@ function initTypingDrill() {
         }
     });
     
-    resetBtn?.addEventListener('click', resetDrill);
+    resetBtn?.addEventListener('click', () => {
+        const typedVal = inputArea.value;
+        if (typedVal.length >= 10 && typingStartTime) {
+            const timeDiffMin = (new Date() - typingStartTime) / 60000;
+            const grossWpm = Math.round((typedVal.length / 5) / (timeDiffMin || 0.01));
+            const netWpm = Math.max(0, grossWpm - Math.round(typingErrors / (timeDiffMin || 0.01)));
+            const accuracy = Math.round(((typedVal.length - typingErrors) / typedVal.length) * 100);
+            
+            const date = new Date().toISOString().split('T')[0];
+            state.typingLogs.push({ date, wpm: netWpm, accuracy });
+            saveState();
+            updateLogTables();
+            showToast(`Logged attempt before reset: ${netWpm} WPM | Acc: ${accuracy}%`);
+        }
+        resetDrill();
+    });
     resetDrill();
 }
 
