@@ -10,7 +10,7 @@
 
 <body>
     <script>
-        window.addEventListener('error', function(e) {
+        window.addEventListener('error', function (e) {
             let errDiv = document.getElementById('global-error-banner');
             if (!errDiv) {
                 errDiv = document.createElement('div');
@@ -26,7 +26,7 @@
         <!-- Global Header -->
         <header>
             <div class="header-title">
-                <h1 style="color: #ff4757;">By: SHOAIB RAWN and Uncle jan Abdul haleem asghar</h1>
+                <h1 style="color: #ff4757;">By: SHOAIB Hassan (softwareengineer)</h1>
                 <h1>BPS-16 Assistant Private Secretary</h1>
                 <p>President's Secretariat (Aiwan-e-Sadr) Skill Test & Interview Preparation Portal</p>
             </div>
@@ -263,7 +263,8 @@
 
                     <!-- Row Drill Selector -->
                     <div id="row-drill-controls" class="form-group d-none" style="margin-bottom: 15px;">
-                        <label for="row-drill-level" style="margin-right: 10px; font-weight: 500;">Select Row Drill Focus:</label>
+                        <label for="row-drill-level" style="margin-right: 10px; font-weight: 500;">Select Row Drill
+                            Focus:</label>
                         <select id="row-drill-level" class="form-control" style="width: auto; display: inline-block;">
                             <option value="homerow">Home Row Only (a, s, d, f, j, k, l, ;)</option>
                             <option value="toprow">Top Row Only (q, w, e, r, t, y, u, i, o, p)</option>
@@ -273,33 +274,47 @@
                     </div>
 
                     <div class="typing-test-box">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <strong style="color: var(--accent-gold);" id="drill-mode-label">Mode: Passage Practice</strong>
-                            <button id="btn-next-passage" class="btn-primary" style="width: auto; padding: 6px 12px; font-size: 0.8rem;">Change Passage</button>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="color: var(--accent-gold);" id="drill-mode-label">Mode: Passage
+                                Practice</strong>
+                            <button id="btn-next-passage" class="btn-primary"
+                                style="width: auto; padding: 6px 12px; font-size: 0.8rem;">Change Passage</button>
                         </div>
-                        
-                        <div id="typing-passage-container" tabindex="0" class="typing-passage-container" style="outline: none; margin-top: 15px;">
+
+                        <div id="typing-passage-container" tabindex="0" class="typing-passage-container"
+                            style="outline: none; margin-top: 15px;">
                             <div id="typing-passage-text" class="typing-test-text">
                                 <!-- Typing text loads here with char highlights -->
                             </div>
-                            <div class="typing-hint" style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">
-                                Click here or press any key to start typing directly. Press <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.8rem;">Backspace</kbd> to correct mistakes.
+                            <div class="typing-hint"
+                                style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">
+                                Click here or press any key to start typing directly. Press <kbd
+                                    style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.8rem;">Backspace</kbd>
+                                to correct mistakes.
                             </div>
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
                             <div>
-                                <span style="color: var(--text-secondary); margin-right: 15px;">Net WPM: <strong id="drill-wpm" style="color: var(--accent-cyan); font-size: 1.2rem;">0</strong></span>
-                                <span style="color: var(--text-secondary);">Accuracy: <strong id="drill-acc" style="color: var(--accent-emerald); font-size: 1.2rem;">100%</strong></span>
+                                <span style="color: var(--text-secondary); margin-right: 15px;">Net WPM: <strong
+                                        id="drill-wpm"
+                                        style="color: var(--accent-cyan); font-size: 1.2rem;">0</strong></span>
+                                <span style="color: var(--text-secondary);">Accuracy: <strong id="drill-acc"
+                                        style="color: var(--accent-emerald); font-size: 1.2rem;">100%</strong></span>
                             </div>
-                            <button id="btn-reset-drill" class="btn-primary" style="width: auto; padding: 8px 16px;">Restart Drill</button>
+                            <button id="btn-reset-drill" class="btn-primary"
+                                style="width: auto; padding: 8px 16px;">Restart Drill</button>
                         </div>
                     </div>
 
                     <!-- Virtual Keyboard Display -->
                     <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-                        <div style="text-align: center; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">
-                            Keep your eyes on the screen! The key you need to type next is highlighted in <strong style="color: var(--accent-gold);">Gold</strong> below.
+                        <div
+                            style="text-align: center; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">
+                            Keep your eyes on the screen! The key you need to type next is highlighted in <strong
+                                style="color: var(--accent-gold);">Gold</strong> below.
                         </div>
                         <div class="keyboard-container" id="kb-container">
                             <!-- Number Row -->
@@ -384,18 +399,25 @@
                 <!-- Guidelines Card (shifted to full width below or floating) -->
                 <div class="card" style="grid-column: span 2; margin-top: 15px;">
                     <div class="card-title">Shorthand & Keyboard Practice Guidelines</div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; font-size: 0.95rem; color: var(--text-secondary);">
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; font-size: 0.95rem; color: var(--text-secondary);">
                         <div>
                             <strong style="color: var(--accent-emerald);">Shorthand Transcription Routine:</strong>
-                            <p style="margin-top: 4px;">Listen to 120 WPM dictation for 5 minutes. Transcribe immediately onto PC. Count your omissions and spellings. Aim for less than 1.5% outline errors.</p>
+                            <p style="margin-top: 4px;">Listen to 120 WPM dictation for 5 minutes. Transcribe
+                                immediately onto PC. Count your omissions and spellings. Aim for less than 1.5% outline
+                                errors.</p>
                         </div>
                         <div>
                             <strong style="color: var(--accent-cyan);">Keyboard Touch Typing Rules:</strong>
-                            <p style="margin-top: 4px;">Never look at your hands! If you get stuck, look at the virtual keyboard display above. Rest index fingers on F and J (homing bumps) and use correct fingers for other keys.</p>
+                            <p style="margin-top: 4px;">Never look at your hands! If you get stuck, look at the virtual
+                                keyboard display above. Rest index fingers on F and J (homing bumps) and use correct
+                                fingers for other keys.</p>
                         </div>
                         <div>
                             <strong style="color: var(--accent-gold);">Aiwan-e-Sadr Exam Strategy:</strong>
-                            <p style="margin-top: 4px;">Secretariat speed tests are strict. Practice daily row drills to push muscle memory so typing words becomes an automatic reflex during shorthand translation.</p>
+                            <p style="margin-top: 4px;">Secretariat speed tests are strict. Practice daily row drills to
+                                push muscle memory so typing words becomes an automatic reflex during shorthand
+                                translation.</p>
                         </div>
                     </div>
                 </div>
