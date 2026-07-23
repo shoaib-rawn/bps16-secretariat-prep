@@ -1166,8 +1166,9 @@ function renderSvgLineChart(containerId, logData, valKey, strokeColor) {
         return;
     }
     
-    const w = container.clientWidth || 400;
-    const h = container.clientHeight || 220;
+    // Use a fixed virtual coordinate grid for drawing, and rely on responsive viewBox scaling
+    const w = 450;
+    const h = 220;
     const padding = 30;
     
     // Find min and max boundaries
@@ -1223,7 +1224,7 @@ function renderSvgLineChart(containerId, logData, valKey, strokeColor) {
     });
     
     const svgHTML = `
-        <svg class="chart-svg">
+        <svg viewBox="0 0 ${w} ${h}" width="100%" height="auto" class="chart-svg" style="display: block; max-width: 100%;">
             ${gridLinesHTML}
             <path d="${pathD}" fill="none" stroke="${strokeColor}" stroke-width="2.5" />
             ${dotsHTML}
