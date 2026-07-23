@@ -1449,6 +1449,28 @@ header::before {
         margin-right: 0 !important;
     }
 
+    .schedule-table-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        display: block !important;
+    }
+
+    .schedule-table {
+        min-width: 550px !important;
+    }
+
+    #dashboard .schedule-table {
+        min-width: 100% !important;
+    }
+
+    #dashboard .schedule-table th:nth-child(1),
+    #dashboard .schedule-table td:nth-child(1),
+    #dashboard .schedule-table th:nth-child(4),
+    #dashboard .schedule-table td:nth-child(4) {
+        display: none !important;
+    }
+
     header {
         flex-direction: column;
         text-align: center;
