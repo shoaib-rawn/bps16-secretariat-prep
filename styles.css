@@ -1413,6 +1413,21 @@ header::before {
     line-height: 1.5;
 }
 
+/* Top Announcement Banner styling */
+.marquee-banner {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: var(--accent-emerald) !important;
+}
+
+.desktop-banner-msg {
+    display: flex !important;
+}
+
+.mobile-banner-msg {
+    display: none !important;
+}
+
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
     .grid-dashboard, .analytics-grid, .grid-syllabus {
@@ -1433,6 +1448,20 @@ header::before {
         font-size: 0.95rem;
         justify-content: flex-start;
     }
+
+    .desktop-banner-msg {
+        display: none !important;
+    }
+
+    .mobile-banner-msg {
+        display: flex !important;
+    }
+
+    .marquee-banner {
+        background: rgba(212, 175, 55, 0.12) !important;
+        border-color: rgba(212, 175, 55, 0.3) !important;
+        color: var(--accent-gold) !important;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1443,7 +1472,7 @@ header::before {
         margin: 0 !important;
     }
 
-    header, .nav-tabs, .motivation-card, .tab-content, .card {
+    header, .nav-tabs, .marquee-banner, .motivation-card, .tab-content, .card {
         width: 100% !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
