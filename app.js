@@ -3543,11 +3543,6 @@ function handleNavigationState(stateObj) {
             tabBtn.classList.add('active');
             contentEl.classList.add('active');
             
-            // Auto scroll on small screen
-            if (window.innerWidth <= 1024) {
-                contentEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            
             if (stateObj.tabId === 'analytics') {
                 renderCharts();
             } else if (stateObj.tabId === 'typing') {
