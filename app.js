@@ -852,6 +852,8 @@ const MOTIVATION_INSIGHTS = [
     }
 ];
 
+let historyStateUpdateInProgress = false;
+
 // 4. Application State (Loaded from Local Storage or initialized)
 let state = {
     currentDay: 1,
@@ -900,6 +902,11 @@ function setupTabs() {
     const tabs = document.querySelectorAll('.tab-btn');
     const contents = document.querySelectorAll('.tab-content');
     
+    // Set initial history state if empty
+    if (!history.state) {
+        history.replaceState({ type: 'tab', tabId: 'dashboard' }, '', '#dashboard');
+    }
+
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
@@ -913,6 +920,11 @@ function setupTabs() {
             // Smoothly scroll to active section on mobile/tablet screens
             if (window.innerWidth <= 1024) {
                 targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            // Push history state
+            if (!historyStateUpdateInProgress) {
+                history.pushState({ type: 'tab', tabId: targetId }, '', `#${targetId}`);
             }
             
             if (targetId === 'analytics') {
@@ -2767,6 +2779,11 @@ function initWrittenExam() {
             document.getElementById('prep-subject-grid').classList.add('d-none');
             document.getElementById('prep-day-selector').classList.remove('d-none');
             
+            // Push history state
+            if (!historyStateUpdateInProgress) {
+                history.pushState({ type: 'day-selector', subject: subject, subjectName: subjectName }, '', `#days-${subject}`);
+            }
+
             // Build Days Grid
             const daysGrid = document.getElementById('subject-days-grid');
             if (daysGrid) {
@@ -2787,8 +2804,7 @@ function initWrittenExam() {
     });
 
     document.getElementById('btn-back-to-subjects')?.addEventListener('click', () => {
-        document.getElementById('prep-day-selector').classList.add('d-none');
-        document.getElementById('prep-subject-grid').classList.remove('d-none');
+        history.back();
     });
 
     updateDailyStudyPlanUI();
@@ -2797,6 +2813,10 @@ function initWrittenExam() {
 
 // Start Written Exam (Full 100 Marks, Model Papers, Subject Drill, or Daily 8 MCQs)
 function startWrittenExam(mode, param = null) {
+    if (!historyStateUpdateInProgress) {
+        history.pushState({ type: 'exam', examMode: mode, param: param }, '', '#exam');
+    }
+
     writtenExamState.mode = mode;
     writtenExamState.subjectKey = (mode === 'drill') ? param : null;
     writtenExamState.active = true;
@@ -3477,4 +3497,118 @@ function showFancyConfirm(title, message, iconType = 'confirm') {
         cancelBtn.addEventListener('click', handleCancel);
         actionBtn.addEventListener('click', handleAction);
     });
+}
+
+// Popstate Browser Back/Forward navigation listener
+window.addEventListener('popstate', (event) => {
+    const stateObj = event.state;
+    if (stateObj) {
+        handleNavigationState(stateObj);
+    } else {
+        // Fallback to home view
+        handleNavigationState({ type: 'tab', tabId: 'dashboard' });
+    }
+});
+
+// Handle popstate SPA route switches
+function handleNavigationState(stateObj) {
+    historyStateUpdateInProgress = true;
+    
+    // Close confirmation modals
+    const modal = document.getElementById('fancy-confirm-modal');
+    if (modal) modal.classList.add('d-none');
+
+    // Cleanly reset exam status if moving away from an active exam state
+    if (writtenExamState.active && stateObj.type !== 'exam') {
+        if (writtenExamState.timerInterval) clearInterval(writtenExamState.timerInterval);
+        writtenExamState.active = false;
+        resetWrittenExamUI();
+    }
+
+    if (stateObj.type === 'tab') {
+        // Hide exam sections if tab switched
+        resetWrittenExamUI();
+        
+        // Show correct main tab content
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        const tabBtn = document.querySelector(`.tab-btn[data-tab="${stateObj.tabId}"]`);
+        const contentEl = document.getElementById(stateObj.tabId);
+        
+        if (tabBtn && contentEl) {
+            tabBtn.classList.add('active');
+            contentEl.classList.add('active');
+            
+            // Auto scroll on small screen
+            if (window.innerWidth <= 1024) {
+                contentEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            if (stateObj.tabId === 'analytics') {
+                renderCharts();
+            } else if (stateObj.tabId === 'typing') {
+                setTimeout(() => {
+                    document.getElementById('typing-passage-container')?.focus();
+                }, 50);
+            }
+        }
+    } else if (stateObj.type === 'day-selector') {
+        // Navigate back to the 40-days day selection view inside Written tab
+        const tabBtn = document.querySelector('.tab-btn[data-tab="written"]');
+        const contentEl = document.getElementById('written');
+        
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        if (tabBtn && contentEl) {
+            tabBtn.classList.add('active');
+            contentEl.classList.add('active');
+        }
+
+        // Show day selector, hide subject grid & active exam layouts
+        document.getElementById('prep-subject-grid').classList.add('d-none');
+        document.getElementById('prep-day-selector').classList.remove('d-none');
+        document.getElementById('selected-subject-title').innerText = stateObj.subjectName;
+
+        // Rebuild days buttons grid
+        const daysGrid = document.getElementById('subject-days-grid');
+        if (daysGrid) {
+            daysGrid.innerHTML = '';
+            for (let d = 1; d <= 40; d++) {
+                const dayBtn = document.createElement('button');
+                dayBtn.className = 'palette-btn';
+                dayBtn.style.padding = '10px';
+                dayBtn.style.fontSize = '0.9rem';
+                dayBtn.innerText = `Day ${d}`;
+                dayBtn.addEventListener('click', () => {
+                    startWrittenExam('daily-subject-day', { subject: stateObj.subject, dayNum: d });
+                });
+                daysGrid.appendChild(dayBtn);
+            }
+        }
+    } else if (stateObj.type === 'written-home') {
+        // Go back to the main list of papers and subjects
+        const tabBtn = document.querySelector('.tab-btn[data-tab="written"]');
+        const contentEl = document.getElementById('written');
+        
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        if (tabBtn && contentEl) {
+            tabBtn.classList.add('active');
+            contentEl.classList.add('active');
+        }
+
+        document.getElementById('prep-day-selector').classList.add('d-none');
+        document.getElementById('prep-subject-grid').classList.remove('d-none');
+    }
+
+    historyStateUpdateInProgress = false;
 }

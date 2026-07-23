@@ -705,6 +705,10 @@ header::before {
     margin-right: auto;
 }
 
+.mobile-keyboard-warning {
+    display: none;
+}
+
 .keyboard-row {
     display: flex;
     justify-content: center;
@@ -1496,7 +1500,15 @@ header::before {
     }
 
     .keyboard-container {
-        display: none; /* Hide virtual keyboard on small screen devices for cleaner space */
+        display: none !important;
+    }
+
+    .mobile-keyboard-warning {
+        display: block !important;
+    }
+
+    .keyboard-desc {
+        display: none !important;
     }
 
     .big-score-display {
