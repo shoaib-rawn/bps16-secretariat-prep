@@ -795,12 +795,12 @@ const SYLLABUS = [
         }
     },
     {
-        day: 45,
+        day: 40,
         category: "theory",
-        title: "Exam Day Protocol & Final Checklist",
-        description: "Final exam strategy: 1. Keep hands warm for shorthand and typing. 2. In shorthand, focus on outline accuracy; don't stress over a single missed word. 3. In typing, accuracy yields speed; typing at 99% accuracy is faster than correcting mistakes. 4. In MS Office, save your file (Ctrl+S) every 30 seconds to prevent lost work during server or PC issues.",
+        title: "Exam Day Protocol & Final Checklist (Part 1 Written + Part 2 Speed)",
+        description: "Final 40-Day exam strategy: 1. Keep hands warm for shorthand and typing speed test. 2. In written test (100 Marks), attempt high-confidence questions first and manage time (90 mins). 3. In typing, accuracy yields speed; typing at 99% accuracy is faster than correcting mistakes. 4. In MS Office, save your file (Ctrl+S) every 30 seconds to prevent lost work during practical exam.",
         shortcut: "Ctrl + S (Save Document - use continuously during practical exams!)",
-        quickTip: "Bring your own shorthand notepad and pencil (2B lead is softer and faster for drawing outlines) to the test center.",
+        quickTip: "Bring your original CNIC, admission letter, shorthand notepad, and HB/2B pencils to the Secretariat testing venue.",
         quiz: {
             question: "What is the single most important habit during a live MS Office practical exam?",
             options: [
@@ -882,8 +882,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initAnalytics();
     initTypingDrill();
     initProtocolCenter();
+    initWrittenExam();
     updateCountdown();
-    showToast("Dashboard Loaded successfully. Welcome, candidate!");
+    showToast("BPS-16 40-Day Prep Portal & 100 Marks Written Test Loaded!");
 });
 
 // Tab Switch Logic
@@ -1663,18 +1664,18 @@ function initProtocolCenter() {
     previewContainer.innerHTML = templates.om;
 }
 
-// 9. Countdown to Skills Test
+// 9. Countdown to Skills & Written Test (40-Day Target)
 function updateCountdown() {
-    // Standard 45 Days duration from today's target (assuming Sep 1st, 2026)
-    const testDate = new Date(2026, 8, 1, 9, 0, 0);
+    // 40 Days Target from current system date
     const today = new Date();
+    const testDate = new Date(today.getTime() + (40 * 24 * 60 * 60 * 1000));
     
     const diffTime = Math.abs(testDate - today);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     const countdownEl = document.getElementById('countdown-days');
     if (countdownEl) {
-        countdownEl.innerText = diffDays > 0 ? diffDays : "0";
+        countdownEl.innerText = diffDays > 0 ? diffDays : "40";
     }
 }
 
@@ -1702,4 +1703,1764 @@ function showToast(message) {
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3500);
+}
+
+/* ==========================================================================
+   100 MARKS WRITTEN EXAM SIMULATOR & QUESTION DATABASE (BPS-16)
+   ========================================================================== */
+
+const WRITTEN_EXAM_DB = [
+    // ----------------------------------------------------------------------
+    // 1. MS OFFICE & COMPUTER KNOWLEDGE (30 MARKS: Questions 1 to 30)
+    // ----------------------------------------------------------------------
+    {
+        id: 1,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which type of break should be inserted in MS Word to change page orientation from Portrait to Landscape for a single page only?",
+        options: ["Page Break (Ctrl+Enter)", "Section Break (Next Page)", "Column Break", "Continuous Break"],
+        answer: 1,
+        explanation: "Section Breaks (Next Page) create independent document formatting zones, allowing different page orientations, margins, or header/footer configurations on specific pages."
+    },
+    {
+        id: 2,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "In MS Excel, which character is used to lock row or column references (creating an absolute cell reference)?",
+        options: ["#", "$", "&", "@"],
+        answer: 1,
+        explanation: "The dollar sign ($) locks the column letter or row number (e.g., $A$1) so references do not change when formulas are copied across cells."
+    },
+    {
+        id: 3,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the keyboard shortcut to trigger a manual Page Break in MS Word?",
+        options: ["Shift + Enter", "Ctrl + Enter", "Alt + Enter", "Ctrl + Shift + Enter"],
+        answer: 1,
+        explanation: "Ctrl + Enter immediately pushes text following the cursor to the top of the next page."
+    },
+    {
+        id: 4,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which MS Excel function counts only non-empty cells containing text, numbers, or logical values in a given range?",
+        options: ["COUNT", "COUNTA", "COUNTBLANK", "COUNTIF"],
+        answer: 1,
+        explanation: "COUNTA counts all non-empty cells in a range regardless of data type, whereas COUNT only counts numeric cells."
+    },
+    {
+        id: 5,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "In PowerPoint, which view is used to apply global changes to font styles, headers, and logos across all slides in a presentation?",
+        options: ["Slide Sorter View", "Reading View", "Slide Master View", "Notes Page View"],
+        answer: 2,
+        explanation: "Slide Master View defines the master hierarchy for formatting, background graphics, and slide layouts across the entire presentation deck."
+    },
+    {
+        id: 6,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the standard function key to launch a PowerPoint presentation slideshow from the very first slide?",
+        options: ["F1", "F5", "Shift + F5", "F11"],
+        answer: 1,
+        explanation: "F5 starts the presentation from Slide 1. Shift + F5 starts the slideshow from the currently selected slide."
+    },
+    {
+        id: 7,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which shortcut key sequence opens the 'Find and Replace' dialog box in MS Word?",
+        options: ["Ctrl + F", "Ctrl + R", "Ctrl + H", "Ctrl + Shift + F"],
+        answer: 2,
+        explanation: "Ctrl + H opens the Replace tab directly in the Find and Replace dialog window."
+    },
+    {
+        id: 8,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "In MS Word Mail Merge, what are the placeholders enclosed in double chevrons (<< Name >>) called?",
+        options: ["Merge Fields", "Database Tags", "Rule Operators", "Data Anchors"],
+        answer: 0,
+        explanation: "Merge Fields act as dynamic data holders linked to columns in an Excel sheet or Access table during Mail Merge."
+    },
+    {
+        id: 9,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the keyboard shortcut to toggle 'Track Changes' on or off in MS Word?",
+        options: ["Ctrl + Alt + T", "Ctrl + Shift + E", "Alt + Shift + C", "Ctrl + T"],
+        answer: 1,
+        explanation: "Ctrl + Shift + E enables or disables tracked revisions and editorial comments in MS Word."
+    },
+    {
+        id: 10,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "In MS Excel, what keyboard shortcut inserts the current date into the selected cell?",
+        options: ["Ctrl + ;", "Ctrl + Shift + ;", "Alt + Shift + D", "Ctrl + D"],
+        answer: 0,
+        explanation: "Ctrl + semicolon (;) inserts the current system date as a static value. Ctrl + Shift + semicolon inserts current time."
+    },
+    {
+        id: 11,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which memory component is non-volatile and contains firmware instructions required to boot up a computer system (BIOS)?",
+        options: ["RAM", "ROM", "Cache Memory", "Virtual Memory"],
+        answer: 1,
+        explanation: "ROM (Read-Only Memory) retains its contents permanently even when the computer is powered off."
+    },
+    {
+        id: 12,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What does URL stand for in computer networking and web terminology?",
+        options: ["Universal Resource Locator", "Uniform Resource Locator", "Unified Routing Location", "Universal Remote Link"],
+        answer: 1,
+        explanation: "URL stands for Uniform Resource Locator, the global address format for web documents and resources."
+    },
+    {
+        id: 13,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which network protocol is primarily responsible for retrieving incoming emails from a remote server to a local mail client?",
+        options: ["SMTP", "POP3", "FTP", "DHCP"],
+        answer: 1,
+        explanation: "POP3 (Post Office Protocol 3) or IMAP is used to retrieve email. SMTP is used exclusively to send emails."
+    },
+    {
+        id: 14,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the default paragraph alignment for official letters and notes written in government secretariats?",
+        options: ["Align Left", "Center", "Justify (Ctrl+J)", "Align Right"],
+        answer: 2,
+        explanation: "Justify alignment distributes text evenly between left and right margins, producing clean, professional document edges."
+    },
+    {
+        id: 15,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which key is used to edit the content of an active cell in MS Excel without overwriting existing data?",
+        options: ["F2", "F4", "F7", "F12"],
+        answer: 0,
+        explanation: "Pressing F2 places the insertion point cursor inside the active cell at the end of existing text."
+    },
+    {
+        id: 16,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the maximum zoom percentage supported in MS Word document window?",
+        options: ["200%", "400%", "500%", "1000%"],
+        answer: 2,
+        explanation: "MS Word supports a zoom range from a minimum of 10% to a maximum of 500%."
+    },
+    {
+        id: 17,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "In MS Excel formula `=VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])`, what does `range_lookup = FALSE` specify?",
+        options: ["Approximate Match", "Exact Match", "Case Sensitive Search", "Wildcard Search Only"],
+        answer: 1,
+        explanation: "Setting range_lookup to FALSE or 0 forces VLOOKUP to search for an exact match of the lookup value."
+    },
+    {
+        id: 18,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which keyboard shortcut applies Subscript formatting (e.g., H₂O) to selected text in MS Word?",
+        options: ["Ctrl + =", "Ctrl + Shift + +", "Alt + Shift + S", "Ctrl + Alt + B"],
+        answer: 0,
+        explanation: "Ctrl + = toggles Subscript formatting. Ctrl + Shift + + toggles Superscript formatting."
+    },
+    {
+        id: 19,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the total number of rows available in a single worksheet in MS Excel 2016 / 2019 / 365?",
+        options: ["65,536", "104,857", "1,048,576", "2,097,152"],
+        answer: 2,
+        explanation: "Modern MS Excel grid contains exactly 1,048,576 rows and 16,384 columns (XFD)."
+    },
+    {
+        id: 20,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which MS Excel function cleans extra spaces from text strings except for single spaces between words?",
+        options: ["CLEAN", "TRIM", "REMOVE", "COMPACT"],
+        answer: 1,
+        explanation: "TRIM removes leading, trailing, and repeated spaces within text strings."
+    },
+    {
+        id: 21,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which shortcut key turns formatting marks (Show/Hide ¶) on or off in MS Word?",
+        options: ["Ctrl + Shift + 8", "Ctrl + Alt + 8", "Alt + Shift + 8", "Ctrl + F8"],
+        answer: 0,
+        explanation: "Ctrl + Shift + 8 (or Ctrl + *) toggles non-printing characters such as space dots, tab arrows, and paragraph marks."
+    },
+    {
+        id: 22,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What feature in MS Excel allows keeping row headers visible while scrolling down a massive dataset?",
+        options: ["Split Window", "Freeze Panes", "Lock Grid", "Pin Rows"],
+        answer: 1,
+        explanation: "Freeze Panes (View > Freeze Panes) locks selected rows or columns in place while navigating the rest of the worksheet."
+    },
+    {
+        id: 23,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the standard file extension for MS PowerPoint presentation templates?",
+        options: [".pptx", ".potx", ".ppsx", ".pptm"],
+        answer: 1,
+        explanation: ".potx is the extension for PowerPoint XML templates used to spawn new pre-styled decks."
+    },
+    {
+        id: 24,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which keyboard shortcut repeats the last formatting action or command in MS Word / Excel?",
+        options: ["F2", "F4 (or Ctrl+Y)", "F7", "F11"],
+        answer: 1,
+        explanation: "F4 or Ctrl + Y repeats or re-applies the previous editing action."
+    },
+    {
+        id: 25,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "In database management systems (DBMS), what uniquely identifies each record in a relational table?",
+        options: ["Foreign Key", "Primary Key", "Composite Key", "Index Tag"],
+        answer: 1,
+        explanation: "A Primary Key contains unique non-null values that uniquely distinguish every record row in a table."
+    },
+    {
+        id: 26,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which feature in MS Word automatically converts typed text like (c) to © or replaces common misspellings?",
+        options: ["AutoCorrect", "AutoText", "SmartTags", "Quick Parts"],
+        answer: 0,
+        explanation: "AutoCorrect automatically corrects typos, capitalizations, and replaces predefined symbols during typing."
+    },
+    {
+        id: 27,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the shortcut to select non-adjacent cells or ranges in an Excel spreadsheet?",
+        options: ["Shift + Left Click", "Ctrl + Left Click", "Alt + Left Click", "Tab + Click"],
+        answer: 1,
+        explanation: "Holding Ctrl while clicking allows selecting disjointed individual cells or separate ranges across a worksheet."
+    },
+    {
+        id: 28,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "Which view in MS Excel displays page boundaries, header/footer text areas, and margin rulers directly on screen?",
+        options: ["Normal View", "Page Layout View", "Page Break Preview", "Custom View"],
+        answer: 1,
+        explanation: "Page Layout View shows the sheet as it will appear on paper, including headers, footers, and page margins."
+    },
+    {
+        id: 29,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "What is the key combination to instantly lock your Windows computer session when stepping away from your secretariat desk?",
+        options: ["Win + L", "Ctrl + Alt + L", "Alt + F4", "Win + D"],
+        answer: 0,
+        explanation: "Windows key + L immediately locks your Windows workstation session to ensure administrative file security."
+    },
+    {
+        id: 30,
+        section: "computer",
+        sectionName: "MS Office & Computer Knowledge",
+        question: "In MS Word, which alignment feature aligns numbers by their decimal points in official financial statements?",
+        options: ["Left Tab", "Decimal Tab", "Bar Tab", "Center Tab"],
+        answer: 1,
+        explanation: "Decimal Tab aligns numbers so that decimal points line up vertically regardless of digit lengths."
+    },
+
+    // ----------------------------------------------------------------------
+    // 2. ENGLISH LANGUAGE & GRAMMAR (20 MARKS: Questions 31 to 50)
+    // ----------------------------------------------------------------------
+    {
+        id: 31,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Choose the correct preposition: 'The accused was acquitted ___ all charges leveled against him.'",
+        options: ["from", "of", "with", "by"],
+        answer: 1,
+        explanation: "The verb 'acquitted' takes the preposition 'of' (e.g., acquitted of theft/charges)."
+    },
+    {
+        id: 32,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "What is the closest SYNONYM of the word 'Meticulous'?",
+        options: ["Careless", "Painstaking / Thorough", "Hasty", "Indifferent"],
+        answer: 1,
+        explanation: "Meticulous means showing great attention to detail, highly careful and painstaking."
+    },
+    {
+        id: 33,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "What is the exact ANTONYM of the word 'Transient'?",
+        options: ["Fleeting", "Permanent / Enduring", "Temporary", "Momentary"],
+        answer: 1,
+        explanation: "Transient means lasting only for a short time; its direct opposite is permanent."
+    },
+    {
+        id: 34,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Convert to Passive Voice: 'The Assistant Private Secretary typed the official notification.'",
+        options: [
+            "The official notification is typed by the Assistant Private Secretary.",
+            "The official notification was typed by the Assistant Private Secretary.",
+            "The official notification had been typed by the Assistant Private Secretary.",
+            "The official notification was being typed by the Assistant Private Secretary."
+        ],
+        answer: 1,
+        explanation: "Past simple active ('typed') changes to 'was typed' in passive voice."
+    },
+    {
+        id: 35,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Convert to Indirect Speech: He said, 'I am preparing for the BPS-16 test today.'",
+        options: [
+            "He said that he is preparing for the BPS-16 test today.",
+            "He said that he was preparing for the BPS-16 test that day.",
+            "He told that he had been preparing for the BPS-16 test today.",
+            "He said he will prepare for the BPS-16 test that day."
+        ],
+        answer: 1,
+        explanation: "Present continuous ('am preparing') converts to past continuous ('was preparing'), and 'today' changes to 'that day'."
+    },
+    {
+        id: 36,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "What is the meaning of the idiom 'To burn the midnight oil'?",
+        options: ["To waste resources", "To work or study late into the night", "To start a fire", "To ruin a project"],
+        answer: 1,
+        explanation: "To burn the midnight oil means to study or work far into the night."
+    },
+    {
+        id: 37,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Fill in the blank with correct subject-verb agreement: 'Neither of the candidate officers ___ present at the hearing.'",
+        options: ["were", "was", "are", "have been"],
+        answer: 1,
+        explanation: "Indefinite pronouns like 'neither', 'either', and 'each' take singular verbs ('was')."
+    },
+    {
+        id: 38,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Identify the correctly spelled word:",
+        options: ["Bureaucracy", "Beurocracy", "Bureacracy", "Beureaucracy"],
+        answer: 0,
+        explanation: "'Bureaucracy' (B-U-R-E-A-U-C-R-A-C-Y) is the correct spelling."
+    },
+    {
+        id: 39,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Choose the correct one-word substitution: 'An official post or office for which no salary is paid'",
+        options: ["Honorary", "Sinecure", "Mercenary", "Autopsy"],
+        answer: 0,
+        explanation: "An honorary position is held without payment. (A sinecure is a paid position with minimal work)."
+    },
+    {
+        id: 40,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Choose the correct preposition: 'He has been working in the Secretariat ___ 2018.'",
+        options: ["for", "since", "from", "during"],
+        answer: 1,
+        explanation: "'Since' is used with a specific starting point in time (2018). 'For' is used for a duration/period of time."
+    },
+    {
+        id: 41,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Identify the error in sentence: 'He is senior than me in service.'",
+        options: ["'He is'", "'senior than'", "'me in'", "'service'"],
+        answer: 1,
+        explanation: "Latin comparative adjectives (senior, junior, superior, inferior, prior) take 'to', not 'than'. Correct: 'senior to me'."
+    },
+    {
+        id: 42,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "What is the closest SYNONYM of the word 'Candid'?",
+        options: ["Secretive", "Frank / Outspoken", "Deceitful", "Cautious"],
+        answer: 1,
+        explanation: "Candid means truthful, straightforward, and frank."
+    },
+    {
+        id: 43,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Fill in the blank: 'If he had submitted the file on time, the Secretary ___ it.'",
+        options: ["would approve", "would have approved", "will approve", "had approved"],
+        answer: 1,
+        explanation: "Third conditional structure: 'If + past perfect (had submitted) ... would have + past participle (would have approved)'."
+    },
+    {
+        id: 44,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "What is the plural form of the word 'Crisis'?",
+        options: ["Crisises", "Crises", "Crisii", "Crisiss"],
+        answer: 1,
+        explanation: "Words ending in -is derived from Greek form plurals by changing -is to -es ('Crises')."
+    },
+    {
+        id: 45,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "What is the ANTONYM of the word 'Ameliorate'?",
+        options: ["Improve", "Worsen / Aggravate", "Enhance", "Mitigate"],
+        answer: 1,
+        explanation: "Ameliorate means to make something better; its opposite is worsen or aggravate."
+    },
+    {
+        id: 46,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Identify the part of speech of the underlined word: 'He typed the report extremely FAST.'",
+        options: ["Adjective", "Adverb", "Noun", "Conjunction"],
+        answer: 1,
+        explanation: "'Fast' modifies the verb 'typed', describing how he typed, so it functions as an Adverb."
+    },
+    {
+        id: 47,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Choose the correct meaning of the phrase 'In lieu of':",
+        options: ["In spite of", "In place of / Instead of", "In favor of", "In compliance with"],
+        answer: 1,
+        explanation: "'In lieu of' is a prepositional phrase meaning instead of or in place of."
+    },
+    {
+        id: 48,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Identify the correctly spelled word:",
+        options: ["Accomodation", "Accommodation", "Acommodation", "Accomodasion"],
+        answer: 1,
+        explanation: "'Accommodation' contains double 'c' and double 'm' (A-C-C-O-M-M-O-D-A-T-I-O-N)."
+    },
+    {
+        id: 49,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "Choose the correct preposition: 'She presided ___ the annual departmental committee meeting.'",
+        options: ["at", "over", "on", "upon"],
+        answer: 1,
+        explanation: "The verb 'preside' takes the preposition 'over' when conducting or chairing a meeting."
+    },
+    {
+        id: 50,
+        section: "english",
+        sectionName: "English Language & Grammar",
+        question: "What is the meaning of the idiom 'A white elephant'?",
+        options: ["A rare valuable item", "A costly but useless possession", "An ancient monument", "A symbol of peace"],
+        answer: 1,
+        explanation: "A white elephant refers to a possession that is very expensive to maintain and yields no practical utility."
+    },
+
+    // ----------------------------------------------------------------------
+    // 3. GENERAL KNOWLEDGE & WORLD AFFAIRS (15 MARKS: Questions 51 to 65)
+    // ----------------------------------------------------------------------
+    {
+        id: 51,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Where are the official headquarters of the United Nations Organization (UNO) located?",
+        options: ["Geneva, Switzerland", "New York, USA", "London, UK", "Paris, France"],
+        answer: 1,
+        explanation: "UN Headquarters was established in New York City, USA, along the East River in 1952."
+    },
+    {
+        id: 52,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Which is the largest and deepest ocean on Earth?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"],
+        answer: 2,
+        explanation: "The Pacific Ocean covers over 30% of the Earth's surface and contains the deepest trench (Mariana Trench)."
+    },
+    {
+        id: 53,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "What is the official currency of Japan?",
+        options: ["Yuan", "Yen", "Won", "Ringgit"],
+        answer: 1,
+        explanation: "The official currency unit of Japan is the Japanese Yen (¥)."
+    },
+    {
+        id: 54,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Where is the Secretariat of the Organization of Islamic Cooperation (OIC) located?",
+        options: ["Riyadh, Saudi Arabia", "Jeddah, Saudi Arabia", "Cairo, Egypt", "Istanbul, Turkey"],
+        answer: 1,
+        explanation: "The OIC General Secretariat is situated in Jeddah, Kingdom of Saudi Arabia."
+    },
+    {
+        id: 55,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Which is the deepest freshwater lake in the world?",
+        options: ["Lake Superior", "Lake Baikal", "Lake Victoria", "Caspian Sea"],
+        answer: 1,
+        explanation: "Lake Baikal in Siberia, Russia, is the world's deepest (1,642m) and most voluminous freshwater lake."
+    },
+    {
+        id: 56,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Who authored the famous classical economic treatise 'The Wealth of Nations' (1776)?",
+        options: ["Karl Marx", "Adam Smith", "John Maynard Keynes", "David Ricardo"],
+        answer: 1,
+        explanation: "Scottish philosopher Adam Smith wrote 'The Wealth of Nations', laying the foundations of modern free-market economics."
+    },
+    {
+        id: 57,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Which country is popularly known as the 'Land of the Rising Sun'?",
+        options: ["China", "Japan", "Thailand", "Norway"],
+        answer: 1,
+        explanation: "Japan is called 'Nippon' or 'Nihon' in Japanese, meaning 'sun origin' or Land of the Rising Sun."
+    },
+    {
+        id: 58,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Where is the headquarters of the World Health Organization (WHO) situated?",
+        options: ["Geneva, Switzerland", "Vienna, Austria", "Rome, Italy", "Washington D.C., USA"],
+        answer: 0,
+        explanation: "WHO was founded in 1948 with its global headquarters in Geneva, Switzerland."
+    },
+    {
+        id: 59,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "The artificial Suez Canal connects which two major bodies of water?",
+        options: ["Black Sea and Caspian Sea", "Mediterranean Sea and Red Sea", "Red Sea and Arabian Sea", "Atlantic Ocean and Pacific Ocean"],
+        answer: 1,
+        explanation: "Opened in 1869, the Suez Canal in Egypt connects the Mediterranean Sea directly to the Red Sea."
+    },
+    {
+        id: 60,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "What is the official standard time zone of Pakistan relative to Coordinated Universal Time (UTC)?",
+        options: ["UTC+4", "UTC+5", "UTC+6", "UTC+3:30"],
+        answer: 1,
+        explanation: "Pakistan Standard Time (PST) is 5 hours ahead of UTC (UTC+05:00)."
+    },
+    {
+        id: 61,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "How many sovereign member nations belong to the South Asian Association for Regional Cooperation (SAARC)?",
+        options: ["6", "7", "8", "10"],
+        answer: 2,
+        explanation: "SAARC has 8 member states: Pakistan, India, Bangladesh, Sri Lanka, Nepal, Bhutan, Maldives, and Afghanistan."
+    },
+    {
+        id: 62,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Which is the smallest continent on Earth by total land area?",
+        options: ["Europe", "Antarctica", "Australia (Oceania)", "South America"],
+        answer: 2,
+        explanation: "Australia is the smallest continent by land surface area (~7.69 million sq km)."
+    },
+    {
+        id: 63,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Which gas is most abundant by volume in the Earth's atmosphere?",
+        options: ["Oxygen (~21%)", "Nitrogen (~78%)", "Carbon Dioxide", "Argon"],
+        answer: 1,
+        explanation: "Nitrogen comprises approximately 78.08% of Earth's atmospheric volume."
+    },
+    {
+        id: 64,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "Where is the principal judicial organ of the UN, the International Court of Justice (ICJ), seated?",
+        options: ["Geneva, Switzerland", "The Hague, Netherlands", "New York, USA", "Brussels, Belgium"],
+        answer: 1,
+        explanation: "The ICJ is headquartered at the Peace Palace in The Hague, Netherlands."
+    },
+    {
+        id: 65,
+        section: "gk",
+        sectionName: "General Knowledge & World Affairs",
+        question: "What is the SI unit of electrical resistance?",
+        options: ["Volt", "Ampere", "Ohm", "Watt"],
+        answer: 2,
+        explanation: "The Ohm (symbol Ω) is the SI derived unit of electrical resistance."
+    },
+
+    // ----------------------------------------------------------------------
+    // 4. PAKISTAN STUDIES & CONSTITUTION (15 MARKS: Questions 66 to 80)
+    // ----------------------------------------------------------------------
+    {
+        id: 66,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "On which date was the historic Lahore Resolution (later known as Pakistan Resolution) passed?",
+        options: ["14th August 1947", "23rd March 1940", "12th March 1949", "3rd June 1947"],
+        answer: 1,
+        explanation: "Passed at Minto Park (now Iqbal Park) Lahore on 23rd March 1940 during the All-India Muslim League session."
+    },
+    {
+        id: 67,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "Who served as the First Governor-General of independent Pakistan?",
+        options: ["Liaquat Ali Khan", "Quaid-e-Azam Muhammad Ali Jinnah", "Khawaja Nazimuddin", "Malik Ghulam Muhammad"],
+        answer: 1,
+        explanation: "Quaid-e-Azam Muhammad Ali Jinnah took oath as the first Governor-General on 15th August 1947."
+    },
+    {
+        id: 68,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "The current operative Constitution of the Islamic Republic of Pakistan was enacted in which year?",
+        options: ["1956", "1962", "1973", "1985"],
+        answer: 2,
+        explanation: "Passed unanimously by the National Assembly and authenticated on 14th August 1973 under Zulfikar Ali Bhutto."
+    },
+    {
+        id: 69,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "What is the height of K2 (Mount Godwin-Austen), the highest mountain peak in Pakistan?",
+        options: ["8,126 meters", "8,611 meters", "8,848 meters", "7,788 meters"],
+        answer: 1,
+        explanation: "K2 in the Karakoram range stands at 8,611 meters (28,251 ft), the second highest peak on Earth."
+    },
+    {
+        id: 70,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "When was the landmark Objective Resolution passed by the Constituent Assembly of Pakistan?",
+        options: ["23rd March 1940", "12th March 1949", "14th August 1947", "23rd March 1956"],
+        answer: 1,
+        explanation: "Moved by Prime Minister Liaquat Ali Khan, the Objective Resolution was adopted on 12th March 1949."
+    },
+    {
+        id: 71,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "Under the 1973 Constitution of Pakistan, what system of government is established at the federal level?",
+        options: ["Presidential System", "Federal Parliamentary System", "Unitary System", "Confederation"],
+        answer: 1,
+        explanation: "The 1973 Constitution establishes a bicameral Federal Parliamentary democracy with Prime Minister as head of government."
+    },
+    {
+        id: 72,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "Following the 25th Constitutional Amendment (FATA Merger), what is the total general seat membership of the National Assembly of Pakistan?",
+        options: ["342", "336", "104", "100"],
+        answer: 1,
+        explanation: "Post-FATA merger and redistributions, total seats in National Assembly were reduced to 336 (266 general + 60 women + 10 non-Muslims)."
+    },
+    {
+        id: 73,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "What is the national flower of Pakistan?",
+        options: ["Rose", "Jasmine (Chambeli)", "Tulip", "Sunflower"],
+        answer: 1,
+        explanation: "Jasmine (Jasminum officinale) is the official national flower of Pakistan."
+    },
+    {
+        id: 74,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "In which year did Pakistan adopt its first constitution, officially becoming an 'Islamic Republic'?",
+        options: ["1947", "1956", "1962", "1973"],
+        answer: 1,
+        explanation: "The 1956 Constitution (enacted 23rd March 1956) proclaimed Pakistan as an Islamic Republic."
+    },
+    {
+        id: 75,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "What is the name of the international border line demarcated between Pakistan and Afghanistan in 1893?",
+        options: ["Radcliffe Line", "Durand Line", "McMahon Line", "Line of Control"],
+        answer: 1,
+        explanation: "The 2,640 km border agreement was signed between Sir Mortimer Durand and Afghan Amir Abdur Rahman Khan in 1893."
+    },
+    {
+        id: 76,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "Who is the Chief Executive and Head of Government under the 1973 Constitution of Pakistan?",
+        options: ["The President", "The Prime Minister", "The Chief Justice", "The Speaker National Assembly"],
+        answer: 1,
+        explanation: "Article 90 vests executive authority of the Federation in the Prime Minister as head of government."
+    },
+    {
+        id: 77,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "Who was appointed as the first Chief Justice of Pakistan upon independence?",
+        options: ["Justice M.R. Kayani", "Justice Sir Abdul Rashid", "Justice Alvin Robert Cornelius", "Justice Muhammad Munir"],
+        answer: 1,
+        explanation: "Sir Mian Abdul Rashid served as the inaugural Chief Justice of Pakistan from June 1949 to June 1954."
+    },
+    {
+        id: 78,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "Tarbela Dam, one of the world's largest earth-filled dams, is constructed across which river?",
+        options: ["Jhelum River", "Chenab River", "Indus River", "Sutlej River"],
+        answer: 2,
+        explanation: "Tarbela Dam is located on the Indus River in Haripur District, Khyber Pakhtunkhwa."
+    },
+    {
+        id: 79,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "In response to which constitutional report did Quaid-e-Azam present his famous '14 Points' in March 1929?",
+        options: ["Simon Commission Report", "Nehru Report (1928)", "Cabinet Mission Plan", "Cripps Proposal"],
+        answer: 1,
+        explanation: "Quaid-e-Azam's 14 Points were formulated at Delhi in March 1929 to safeguard Muslim rights against the Nehru Report."
+    },
+    {
+        id: 80,
+        section: "pakstudy",
+        sectionName: "Pakistan Studies & Constitution",
+        question: "In the Federal Secretariat structure, under the Rules of Business 1973, what is the primary role of BPS-16 cadre (Assistant / Assistant Private Secretary)?",
+        options: [
+            "Policy approval and signing international treaties",
+            "Supervising section diary, drafting routine correspondence, taking dictation, and managing file records",
+            "Auditing provincial expenditures",
+            "Appointing judicial magistrates"
+        ],
+        answer: 1,
+        explanation: "BPS-16 personnel form the administrative baseline responsible for shorthand dictation, typing, file movement registers, and drafting."
+    },
+
+    // ----------------------------------------------------------------------
+    // 5. ISLAMIAT & ISLAMIC HISTORY (10 MARKS: Questions 81 to 90)
+    // ----------------------------------------------------------------------
+    {
+        id: 81,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "Which were the first verses of the Holy Quran revealed to Prophet Muhammad (PBUH) in Cave Hira?",
+        options: ["First 5 verses of Surah Al-Fatiha", "First 5 verses of Surah Al-Alaq (Iqra)", "First 10 verses of Surah Al-Baqarah", "Surah Yaseen"],
+        answer: 1,
+        explanation: "The first divine revelation brought by Angel Jibrael (A.S.) comprised the first 5 verses of Surah Al-Alaq."
+    },
+    {
+        id: 82,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "How many total Surahs (chapters) are contained in the Holy Quran?",
+        options: ["86", "114", "6666", "30"],
+        answer: 1,
+        explanation: "The Holy Quran consists of 114 Surahs (86 Makki and 28 Madani)."
+    },
+    {
+        id: 83,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "In which Hijri year did the decisive Ghazwa-e-Badr take place?",
+        options: ["1 A.H.", "2 A.H.", "3 A.H.", "5 A.H."],
+        answer: 1,
+        explanation: "The Battle of Badr took place on 17th Ramadan, 2 A.H. (624 AD), resulting in victory for Muslims."
+    },
+    {
+        id: 84,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "Who was chosen as the First Caliph of Islam following the demise of Prophet Muhammad (PBUH)?",
+        options: ["Hazrat Umar Farooq (R.A.)", "Hazrat Abu Bakr Siddique (R.A.)", "Hazrat Usman Ghani (R.A.)", "Hazrat Ali Murtaza (R.A.)"],
+        answer: 1,
+        explanation: "Hazrat Abu Bakr Siddique (R.A.) served as the 1st Rashidun Caliph from 632 to 634 AD."
+    },
+    {
+        id: 85,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "Which fundamental Pillar of Islam is referred to in Hadith as a 'Shield against sin and hellfire'?",
+        options: ["Salah (Prayer)", "Sawm / Roza (Fasting)", "Zakat (Almsgiving)", "Hajj (Pilgrimage)"],
+        answer: 1,
+        explanation: "Prophet Muhammad (PBUH) stated: 'Fasting is a shield (Junnah) with which a servant protects himself from the Fire.'"
+    },
+    {
+        id: 86,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "Which is the longest Surah in the Holy Quran?",
+        options: ["Surah Al-Imran", "Surah Al-Baqarah", "Surah An-Nisa", "Surah Yaseen"],
+        answer: 1,
+        explanation: "Surah Al-Baqarah (Chapter 2) contains 286 verses and is the longest Surah in the Holy Quran."
+    },
+    {
+        id: 87,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "In which Hijri year was the historic Treaty of Hudaibiya signed between Muslims and Quraish?",
+        options: ["4 A.H.", "6 A.H.", "8 A.H.", "10 A.H."],
+        answer: 1,
+        explanation: "Sulh al-Hudaibiyyah was concluded in 6 A.H. (628 AD), recognized by Quran as 'Fath-um-Mubeen' (a manifest victory)."
+    },
+    {
+        id: 88,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "What was the name of the respected mother of Holy Prophet Muhammad (PBUH)?",
+        options: ["Hazrat Halima (R.A.)", "Hazrat Amina (R.A.)", "Hazrat Khadija (R.A.)", "Hazrat Fatima (R.A.)"],
+        answer: 1,
+        explanation: "Hazrat Amina bint Wahb (R.A.) was the mother of Prophet Muhammad (PBUH)."
+    },
+    {
+        id: 89,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "In which Hijri year did the bloodless Conquest of Makkah (Fath Makkah) occur?",
+        options: ["6 A.H.", "8 A.H.", "9 A.H.", "10 A.H."],
+        answer: 1,
+        explanation: "The Conquest of Makkah took place in Ramadan, 8 A.H. (630 AD)."
+    },
+    {
+        id: 90,
+        section: "islamiat",
+        sectionName: "Islamiat & Islamic History",
+        question: "What is the minimum threshold (Nisab) of Gold for Zakat obligation?",
+        options: ["5 Tolas", "7.5 Tolas (87.48 grams)", "52.5 Tolas", "10 Tolas"],
+        answer: 1,
+        explanation: "Nisab for Gold is 7.5 Tolas (87.48 grams). For Silver, it is 52.5 Tolas (612.36 grams)."
+    },
+
+    // ----------------------------------------------------------------------
+    // 6. GENERAL MATHEMATICS & ANALYTICAL ABILITY (10 MARKS: Questions 91 to 100)
+    // ----------------------------------------------------------------------
+    {
+        id: 91,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "If 20% of a number is equal to 40, what is 50% of that same number?",
+        options: ["80", "100", "120", "200"],
+        answer: 1,
+        explanation: "Let number be X. 0.20 * X = 40 => X = 200. Therefore, 50% of 200 = 100."
+    },
+    {
+        id: 92,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "What is the arithmetic mean (average) of the numbers: 10, 20, 30, 40, and 50?",
+        options: ["25", "30", "35", "40"],
+        answer: 1,
+        explanation: "Sum = 10+20+30+40+50 = 150. Count = 5. Average = 150 / 5 = 30."
+    },
+    {
+        id: 93,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "Two numbers are in the ratio 2 : 3. If their sum is 50, what is the larger number?",
+        options: ["20", "25", "30", "35"],
+        answer: 2,
+        explanation: "Total parts = 2 + 3 = 5 parts. 1 part = 50 / 5 = 10. Larger number = 3 parts = 3 * 10 = 30."
+    },
+    {
+        id: 94,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "Complete the number series pattern: 2, 4, 8, 16, 32, ___?",
+        options: ["48", "64", "56", "128"],
+        answer: 1,
+        explanation: "Each number is multiplied by 2 (geometric sequence). 32 * 2 = 64."
+    },
+    {
+        id: 95,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "Calculate the Simple Interest on a principal amount of Rs. 1,000 at 10% per annum for 2 years.",
+        options: ["Rs. 100", "Rs. 150", "Rs. 200", "Rs. 250"],
+        answer: 2,
+        explanation: "Simple Interest formula SI = (P * R * T) / 100 = (1000 * 10 * 2) / 100 = Rs. 200."
+    },
+    {
+        id: 96,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "Solve the linear equation for x: `3x + 5 = 20`",
+        options: ["x = 3", "x = 5", "x = 6", "x = 15"],
+        answer: 1,
+        explanation: "3x = 20 - 5 => 3x = 15 => x = 5."
+    },
+    {
+        id: 97,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "Which of the following fractions is largest in value: 1/2, 3/4, 2/3, or 5/8?",
+        options: ["1/2 (0.50)", "3/4 (0.75)", "2/3 (0.66)", "5/8 (0.625)"],
+        answer: 1,
+        explanation: "Converting to decimals: 1/2 = 0.50, 3/4 = 0.75, 2/3 = 0.667, 5/8 = 0.625. Largest is 3/4."
+    },
+    {
+        id: 98,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "If Worker A can complete a task in 6 days and Worker B in 12 days, how many days will they take working together?",
+        options: ["3 days", "4 days", "5 days", "9 days"],
+        answer: 1,
+        explanation: "Combined rate = 1/6 + 1/12 = 3/12 = 1/4 per day. Total time taken = 4 days."
+    },
+    {
+        id: 99,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "What is the sum of interior angles of any Euclidean triangle?",
+        options: ["90 degrees", "180 degrees", "270 degrees", "360 degrees"],
+        answer: 1,
+        explanation: "The interior angles of any triangle always add up to 180 degrees."
+    },
+    {
+        id: 100,
+        section: "math",
+        sectionName: "General Math & Analytical Ability",
+        question: "If the price of a official handbook increases from Rs. 80 to Rs. 100, what is the percentage increase?",
+        options: ["20%", "25%", "30%", "15%"],
+        answer: 1,
+        explanation: "Increase = 100 - 80 = 20. Percentage Increase = (20 / 80) * 100 = 25%."
+    }
+];
+
+// Active Written Exam Runtime State
+let writtenExamState = {
+    active: false,
+    mode: 'full',
+    subjectKey: null,
+    questions: [],
+    userAnswers: [],
+    flagged: new Set(),
+    currentIndex: 0,
+    timerSeconds: 5400,
+    timerInterval: null,
+    startTime: null
+};
+
+// Initialize Written Exam Event Listeners
+function initWrittenExam() {
+    const btnStartFull = document.getElementById('btn-start-full-exam');
+    if (btnStartFull) {
+        btnStartFull.addEventListener('click', () => {
+            startWrittenExam('full');
+        });
+    }
+
+    // Start Daily 8-Question Drill (38-Day Plan)
+    const btnStartDaily8 = document.getElementById('btn-start-daily-8');
+    if (btnStartDaily8) {
+        btnStartDaily8.addEventListener('click', () => {
+            startWrittenExam('daily8');
+        });
+    }
+
+    // Model Papers Buttons (6 Papers)
+    const modelPaperBtns = document.querySelectorAll('.model-paper-btn');
+    modelPaperBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const paperNum = parseInt(btn.dataset.paper) || 1;
+            startWrittenExam('paper', paperNum);
+        });
+    });
+
+    const drillBtns = document.querySelectorAll('.drill-subject-btn');
+    drillBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const subject = btn.dataset.subject;
+            startWrittenExam('drill', subject);
+        });
+    });
+
+    document.getElementById('btn-prev-q')?.addEventListener('click', () => navigateQuestion(-1));
+    document.getElementById('btn-next-q')?.addEventListener('click', () => navigateQuestion(1));
+    document.getElementById('btn-flag-q')?.addEventListener('click', toggleFlagCurrentQuestion);
+    document.getElementById('btn-clear-q')?.addEventListener('click', clearCurrentAnswer);
+    document.getElementById('btn-submit-exam-early')?.addEventListener('click', confirmSubmitExam);
+    document.getElementById('btn-start-test-confirm')?.addEventListener('click', () => {
+        document.getElementById('exam-start-setup-card').classList.add('d-none');
+        const examGrid = document.querySelector('.exam-main-grid');
+        if (examGrid) examGrid.classList.remove('d-none');
+        startExamTimer();
+        renderCurrentQuestion();
+    });
+    document.getElementById('btn-quit-exam')?.addEventListener('click', async () => {
+        const confirmed = await showFancyConfirm("Exit Test", "Are you sure you want to exit the current test? Your progress will not be saved.", "quit");
+        if (confirmed) {
+            if (writtenExamState.timerInterval) clearInterval(writtenExamState.timerInterval);
+            writtenExamState.active = false;
+            resetWrittenExamUI();
+            showToast("Test exited.");
+        }
+    });
+    document.getElementById('btn-retake-exam')?.addEventListener('click', resetWrittenExamUI);
+
+    document.getElementById('btn-review-answers')?.addEventListener('click', () => openAnswerReview('all'));
+    document.getElementById('btn-back-to-results')?.addEventListener('click', showResultScreen);
+
+    const reviewFilterBtns = document.querySelectorAll('.review-filter-btn');
+    reviewFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            reviewFilterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderAnswerReviewList(btn.dataset.filter);
+        });
+    });
+
+    document.getElementById('btn-clear-exam-history')?.addEventListener('click', async () => {
+        const confirmed = await showFancyConfirm("Clear History", "Are you sure you want to clear all recorded exam attempts? This cannot be undone.", "quit");
+        if (confirmed) {
+            localStorage.removeItem('bps16_written_history');
+            loadExamHistoryTable();
+            showToast("Exam history cleared.");
+        }
+    });
+
+    // Subject Cards click to open 40-Days selection
+    const subjectCards = document.querySelectorAll('.prep-subject-card');
+    subjectCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const subject = card.dataset.subject;
+            const subjectName = card.querySelector('.syll-title').innerText;
+            
+            document.getElementById('selected-subject-title').innerText = subjectName;
+            document.getElementById('prep-subject-grid').classList.add('d-none');
+            document.getElementById('prep-day-selector').classList.remove('d-none');
+            
+            // Build Days Grid
+            const daysGrid = document.getElementById('subject-days-grid');
+            if (daysGrid) {
+                daysGrid.innerHTML = '';
+                for (let d = 1; d <= 40; d++) {
+                    const dayBtn = document.createElement('button');
+                    dayBtn.className = 'palette-btn';
+                    dayBtn.style.padding = '10px';
+                    dayBtn.style.fontSize = '0.9rem';
+                    dayBtn.innerText = `Day ${d}`;
+                    dayBtn.addEventListener('click', () => {
+                        startWrittenExam('daily-subject-day', { subject, dayNum: d });
+                    });
+                    daysGrid.appendChild(dayBtn);
+                }
+            }
+        });
+    });
+
+    document.getElementById('btn-back-to-subjects')?.addEventListener('click', () => {
+        document.getElementById('prep-day-selector').classList.add('d-none');
+        document.getElementById('prep-subject-grid').classList.remove('d-none');
+    });
+
+    updateDailyStudyPlanUI();
+    loadExamHistoryTable();
+}
+
+// Start Written Exam (Full 100 Marks, Model Papers, Subject Drill, or Daily 8 MCQs)
+function startWrittenExam(mode, param = null) {
+    writtenExamState.mode = mode;
+    writtenExamState.subjectKey = (mode === 'drill') ? param : null;
+    writtenExamState.active = true;
+    writtenExamState.currentIndex = 0;
+    writtenExamState.flagged = new Set();
+    writtenExamState.startTime = new Date();
+
+    if (mode === 'full') {
+        writtenExamState.questions = [...WRITTEN_EXAM_DB];
+        writtenExamState.timerSeconds = 90 * 60; // 90 minutes
+        document.getElementById('exam-mode-title').innerText = "Full 100 Marks Written Mock Exam";
+    } else if (mode === 'paper') {
+        const paperNum = param || 1;
+        // Shift questions deterministically based on paper number for authentic distinct papers
+        const shift = (paperNum - 1) * 15;
+        writtenExamState.questions = WRITTEN_EXAM_DB.map((q, idx) => {
+            const targetIdx = (idx + shift) % WRITTEN_EXAM_DB.length;
+            return { ...WRITTEN_EXAM_DB[targetIdx], id: idx + 1 };
+        });
+        writtenExamState.timerSeconds = 90 * 60;
+        document.getElementById('exam-mode-title').innerText = `Model Paper ${paperNum}: Official BPS-16 Past Paper`;
+    } else if (mode === 'daily8') {
+        // Pick 8 daily questions based on current day
+        const dayNum = state.currentDay || 1;
+        const startIdx = ((dayNum - 1) * 8) % WRITTEN_EXAM_DB.length;
+        const count = (dayNum === 38) ? 4 : 8;
+        writtenExamState.questions = [];
+        for (let i = 0; i < count; i++) {
+            const q = WRITTEN_EXAM_DB[(startIdx + i) % WRITTEN_EXAM_DB.length];
+            writtenExamState.questions.push({ ...q, id: i + 1 });
+        }
+        writtenExamState.timerSeconds = count * 2 * 60; // 2 mins per question
+        document.getElementById('exam-mode-title').innerText = `Daily Study Drill (Day ${dayNum} - ${count} MCQs Target)`;
+    } else if (mode === 'daily-subject-day') {
+        const subject = param.subject;
+        const dayNum = param.dayNum;
+        const subjectQuestions = WRITTEN_EXAM_DB.filter(q => q.section === subject);
+        
+        // Pick exactly 8 questions deterministically for this day & subject
+        const startIdx = ((dayNum - 1) * 8) % subjectQuestions.length;
+        writtenExamState.questions = [];
+        for (let i = 0; i < 8; i++) {
+            const q = subjectQuestions[(startIdx + i) % subjectQuestions.length];
+            writtenExamState.questions.push({ ...q, id: i + 1 });
+        }
+        writtenExamState.timerSeconds = 8 * 2 * 60; // 16 minutes
+        const subjectTitle = document.getElementById('selected-subject-title').innerText;
+        document.getElementById('exam-mode-title').innerText = `${subjectTitle} (Day ${dayNum} - 8 MCQs)`;
+    } else {
+        writtenExamState.questions = WRITTEN_EXAM_DB.filter(q => q.section === param);
+        writtenExamState.timerSeconds = Math.max(15 * 60, writtenExamState.questions.length * 90);
+        const sampleQ = writtenExamState.questions[0];
+        document.getElementById('exam-mode-title').innerText = `${sampleQ ? sampleQ.sectionName : 'Subject'} Practice Drill`;
+    }
+
+    writtenExamState.userAnswers = new Array(writtenExamState.questions.length).fill(null);
+
+    // Update UI Visibility
+    document.getElementById('written-mode-select').classList.add('d-none');
+    document.getElementById('written-exam-result').classList.add('d-none');
+    document.getElementById('written-answer-review').classList.add('d-none');
+    document.getElementById('written-exam-active').classList.remove('d-none');
+
+    // Build Palette
+    buildQuestionPalette();
+
+    // Show start setup screen and hide active test grid
+    const setupCard = document.getElementById('exam-start-setup-card');
+    const examGrid = document.querySelector('.exam-main-grid');
+    if (setupCard) setupCard.classList.remove('d-none');
+    if (examGrid) examGrid.classList.add('d-none');
+
+    // Update setup screen text
+    const modeTitle = document.getElementById('exam-mode-title').innerText;
+    document.getElementById('setup-exam-title').innerText = modeTitle;
+    document.getElementById('setup-exam-info').innerHTML = `
+        This test contains <strong>${writtenExamState.questions.length} Questions</strong>. 
+        You have <strong>${Math.round(writtenExamState.timerSeconds / 60)} Minutes</strong> to complete it.
+    `;
+
+    // Reset initial timer display
+    updateTimerDisplay();
+
+    showToast(`Exam loaded! Ready to start.`);
+}
+
+// Build Question Palette Buttons (1 to N)
+function buildQuestionPalette() {
+    const grid = document.getElementById('question-palette-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    writtenExamState.questions.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'palette-btn';
+        btn.innerText = idx + 1;
+        btn.id = `palette-btn-${idx}`;
+        btn.addEventListener('click', () => {
+            writtenExamState.currentIndex = idx;
+            renderCurrentQuestion();
+        });
+        grid.appendChild(btn);
+    });
+
+    updatePaletteState();
+}
+
+// Update Palette Button Classes
+function updatePaletteState() {
+    writtenExamState.questions.forEach((q, idx) => {
+        const btn = document.getElementById(`palette-btn-${idx}`);
+        if (!btn) return;
+
+        btn.classList.remove('active-q', 'answered', 'flagged');
+
+        if (idx === writtenExamState.currentIndex) {
+            btn.classList.add('active-q');
+        }
+
+        if (writtenExamState.flagged.has(idx)) {
+            btn.classList.add('flagged');
+        } else if (writtenExamState.userAnswers[idx] !== null) {
+            btn.classList.add('answered');
+        }
+    });
+
+    const answeredCount = writtenExamState.userAnswers.filter(a => a !== null).length;
+    const answeredLbl = document.getElementById('answered-counter-label');
+    if (answeredLbl) {
+        answeredLbl.innerText = `${answeredCount} / ${writtenExamState.questions.length} Answered`;
+    }
+}
+
+// Render Active Question
+function renderCurrentQuestion() {
+    const idx = writtenExamState.currentIndex;
+    const q = writtenExamState.questions[idx];
+    if (!q) return;
+
+    // Header counter and progress
+    document.getElementById('q-curr-num').innerText = idx + 1;
+    document.getElementById('q-total-num').innerText = writtenExamState.questions.length;
+
+    const progressPct = Math.round(((idx + 1) / writtenExamState.questions.length) * 100);
+    const progressFill = document.getElementById('exam-progress-fill');
+    if (progressFill) progressFill.style.width = `${progressPct}%`;
+
+    // Section Tag
+    document.getElementById('q-section-badge').innerText = q.sectionName.toUpperCase();
+
+    // Status Badge
+    const statusBadge = document.getElementById('q-status-badge');
+    if (statusBadge) {
+        statusBadge.className = 'q-status-tag';
+        if (writtenExamState.flagged.has(idx)) {
+            statusBadge.classList.add('flagged');
+            statusBadge.innerText = '🚩 Flagged';
+        } else if (writtenExamState.userAnswers[idx] !== null) {
+            statusBadge.classList.add('answered');
+            statusBadge.innerText = '✓ Answered';
+        } else {
+            statusBadge.innerText = 'Unattempted';
+        }
+    }
+
+    // Question Text
+    document.getElementById('q-text-heading').innerText = `${idx + 1}. ${q.question}`;
+
+    // Render 4 Option Cards
+    const optionsContainer = document.getElementById('q-options-list');
+    optionsContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const userAns = writtenExamState.userAnswers[idx];
+    const isAnswered = (userAns !== null);
+
+    q.options.forEach((optText, optIdx) => {
+        const optBtn = document.createElement('div');
+        optBtn.className = 'option-btn';
+        
+        if (isAnswered) {
+            optBtn.classList.add('disabled');
+            if (optIdx === q.answer) {
+                optBtn.classList.add('correct-choice');
+            } else if (optIdx === userAns) {
+                optBtn.classList.add('wrong-choice');
+            }
+        } else {
+            if (userAns === optIdx) {
+                optBtn.classList.add('selected');
+            }
+        }
+
+        optBtn.innerHTML = `
+            <div class="option-letter">${letters[optIdx]}</div>
+            <div>${optText}</div>
+        `;
+
+        if (!isAnswered) {
+            optBtn.addEventListener('click', () => {
+                writtenExamState.userAnswers[idx] = optIdx;
+                renderCurrentQuestion();
+                updatePaletteState();
+            });
+        }
+
+        optionsContainer.appendChild(optBtn);
+    });
+
+    // Render Explanation Box if Answered
+    const explanationBox = document.getElementById('q-explanation-box');
+    if (explanationBox) {
+        if (isAnswered) {
+            explanationBox.innerHTML = `
+                <strong style="color: var(--accent-gold); display: block; margin-bottom: 4px;">💡 Study Explanation & Reason:</strong>
+                ${q.explanation}
+            `;
+            explanationBox.classList.remove('d-none');
+        } else {
+            explanationBox.classList.add('d-none');
+            explanationBox.innerHTML = '';
+        }
+    }
+
+    // Control Buttons
+    const prevBtn = document.getElementById('btn-prev-q');
+    const nextBtn = document.getElementById('btn-next-q');
+
+    if (prevBtn) prevBtn.disabled = (idx === 0);
+    if (nextBtn) {
+        if (idx === writtenExamState.questions.length - 1) {
+            nextBtn.innerText = 'Submit Exam ✓';
+            nextBtn.onclick = confirmSubmitExam;
+        } else {
+            nextBtn.innerText = 'Next Question →';
+            nextBtn.onclick = () => navigateQuestion(1);
+        }
+    }
+
+    updatePaletteState();
+}
+
+// Navigate Question
+function navigateQuestion(direction) {
+    const newIdx = writtenExamState.currentIndex + direction;
+    if (newIdx >= 0 && newIdx < writtenExamState.questions.length) {
+        writtenExamState.currentIndex = newIdx;
+        renderCurrentQuestion();
+    }
+}
+
+// Flag / Unflag Question
+function toggleFlagCurrentQuestion() {
+    const idx = writtenExamState.currentIndex;
+    if (writtenExamState.flagged.has(idx)) {
+        writtenExamState.flagged.delete(idx);
+        showToast(`Question ${idx + 1} unflagged.`);
+    } else {
+        writtenExamState.flagged.add(idx);
+        showToast(`Question ${idx + 1} flagged for review.`);
+    }
+    renderCurrentQuestion();
+}
+
+// Clear Selection for Current Question
+function clearCurrentAnswer() {
+    const idx = writtenExamState.currentIndex;
+    writtenExamState.userAnswers[idx] = null;
+    renderCurrentQuestion();
+    showToast(`Cleared answer for Question ${idx + 1}.`);
+}
+
+// Start Timer Interval
+function startExamTimer() {
+    if (writtenExamState.timerInterval) clearInterval(writtenExamState.timerInterval);
+
+    updateTimerDisplay();
+
+    writtenExamState.timerInterval = setInterval(() => {
+        writtenExamState.timerSeconds--;
+
+        updateTimerDisplay();
+
+        if (writtenExamState.timerSeconds <= 0) {
+            clearInterval(writtenExamState.timerInterval);
+            showToast("Time expired! Submitting your exam automatically...");
+            submitWrittenExam();
+        }
+    }, 1000);
+}
+
+// Update Timer UI
+function updateTimerDisplay() {
+    const mins = Math.floor(writtenExamState.timerSeconds / 60);
+    const secs = writtenExamState.timerSeconds % 60;
+    const formatted = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+    const timerDisplay = document.getElementById('exam-timer-display');
+    const timerBox = document.getElementById('exam-timer-box');
+
+    if (timerDisplay) timerDisplay.innerText = formatted;
+
+    if (timerBox) {
+        if (writtenExamState.timerSeconds <= 600) { // 10 mins warning
+            timerBox.classList.add('warning');
+        } else {
+            timerBox.classList.remove('warning');
+        }
+    }
+}
+
+// Confirm Submit
+async function confirmSubmitExam() {
+    const unanswered = writtenExamState.userAnswers.filter(a => a === null).length;
+    let msg = "Are you sure you want to submit your Written Exam?";
+    if (unanswered > 0) {
+        msg = `You have ${unanswered} unanswered question(s). Are you sure you want to submit now?`;
+    }
+
+    const confirmed = await showFancyConfirm("Submit Written Exam", msg, "submit");
+    if (confirmed) {
+        submitWrittenExam();
+    }
+}
+
+// Calculate & Submit Written Exam
+function submitWrittenExam() {
+    if (writtenExamState.timerInterval) clearInterval(writtenExamState.timerInterval);
+    writtenExamState.active = false;
+
+    const totalQ = writtenExamState.questions.length;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let unattemptedCount = 0;
+
+    writtenExamState.questions.forEach((q, idx) => {
+        const userAns = writtenExamState.userAnswers[idx];
+        if (userAns === null) {
+            unattemptedCount++;
+        } else if (userAns === q.answer) {
+            correctCount++;
+        } else {
+            wrongCount++;
+        }
+    });
+
+    const percentage = Math.round((correctCount / totalQ) * 100);
+    const timeSpentSec = Math.floor((new Date() - writtenExamState.startTime) / 1000);
+    const timeMins = Math.floor(timeSpentSec / 60);
+    const timeSecs = timeSpentSec % 60;
+
+    // Render Results Header
+    document.getElementById('result-score-num').innerText = correctCount;
+    document.getElementById('result-percentage-text').innerText = `Percentage: ${percentage}%`;
+
+    document.getElementById('r-stat-correct').innerText = correctCount;
+    document.getElementById('r-stat-wrong').innerText = wrongCount;
+    document.getElementById('r-stat-unattempted').innerText = unattemptedCount;
+    document.getElementById('r-stat-time').innerText = `${timeMins}m ${timeSecs}s`;
+
+    const statusBadge = document.getElementById('result-status-badge');
+    if (statusBadge) {
+        if (percentage >= 50) {
+            statusBadge.className = 'result-badge pass';
+            statusBadge.innerText = 'PASSED - QUALIFIED FOR SPEED TEST';
+        } else {
+            statusBadge.className = 'result-badge fail';
+            statusBadge.innerText = 'NEEDS IMPROVEMENT (CUTOFF: 50%)';
+        }
+    }
+
+    // Render Section Breakdown Table
+    renderSectionBreakdownTable();
+
+    // Show Result Panel
+    showResultScreen();
+
+    let modeLabel = "100 Marks Written Mock Exam";
+    const titleEl = document.getElementById('exam-mode-title');
+    if (titleEl) modeLabel = titleEl.innerText;
+
+    saveExamAttemptToHistory(correctCount, totalQ, percentage, modeLabel, timeSpentSec);
+
+    showToast(`Exam submitted! You scored ${correctCount}/${totalQ} (${percentage}%).`);
+}
+
+// Save Exam Attempt to LocalStorage History
+function saveExamAttemptToHistory(score, total, percentage, modeName, timeSpentSec) {
+    try {
+        const historyJson = localStorage.getItem('bps16_written_history');
+        const history = historyJson ? JSON.parse(historyJson) : [];
+        
+        const date = new Date().toISOString().split('T')[0];
+        history.unshift({
+            date,
+            modeName,
+            score,
+            total,
+            percentage,
+            timeSpentSec,
+            passed: percentage >= 50
+        });
+        
+        localStorage.setItem('bps16_written_history', JSON.stringify(history.slice(0, 50)));
+        
+        // If daily drill, update total completed MCQs counter
+        if (modeName.includes('Daily Study Drill')) {
+            const currentFinished = parseInt(localStorage.getItem('bps16_daily_finished_mcqs') || '0') + score;
+            localStorage.setItem('bps16_daily_finished_mcqs', currentFinished.toString());
+        }
+        
+        updateDailyStudyPlanUI();
+        loadExamHistoryTable();
+    } catch (e) {
+        console.warn("Failed to save exam history to LocalStorage:", e);
+    }
+}
+
+// Load Exam History Table from LocalStorage
+function loadExamHistoryTable() {
+    const tbody = document.getElementById('written-history-table-body');
+    if (!tbody) return;
+    
+    try {
+        const historyJson = localStorage.getItem('bps16_written_history');
+        const history = historyJson ? JSON.parse(historyJson) : [];
+        
+        if (history.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No exam attempts logged yet. Complete a daily drill or model paper to record your history!</td></tr>`;
+            return;
+        }
+        
+        tbody.innerHTML = '';
+        history.forEach((item) => {
+            const statusBadge = item.passed ? 
+                `<span class="category-badge cat-emerald">PASSED</span>` : 
+                `<span class="category-badge cat-rose">FAILED</span>`;
+                
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="time-badge">${item.date}</span></td>
+                <td><strong>${item.modeName}</strong></td>
+                <td><strong style="color: var(--accent-gold);">${item.score} / ${item.total}</strong></td>
+                <td>${item.percentage}%</td>
+                <td>${statusBadge}</td>
+                <td><button onclick="openAnswerReview('all')" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; width: auto;">Review</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (e) {
+        console.warn("Failed to load exam history:", e);
+    }
+}
+
+// Update Daily Study Plan UI Widget
+function updateDailyStudyPlanUI() {
+    const finishedMcqs = parseInt(localStorage.getItem('bps16_daily_finished_mcqs') || '0');
+    const dayNum = Math.min(38, Math.floor(finishedMcqs / 8) + 1);
+    
+    const counterText = document.getElementById('daily-plan-counter-text');
+    if (counterText) {
+        counterText.innerText = `${finishedMcqs} / 300 Questions Finished (Day ${dayNum} of 38)`;
+    }
+    
+    const progressFill = document.getElementById('daily-plan-progress-fill');
+    if (progressFill) {
+        const pct = Math.min(100, Math.round((finishedMcqs / 300) * 100));
+        progressFill.style.width = `${pct}%`;
+    }
+}
+
+// Section Performance Table Generator
+function renderSectionBreakdownTable() {
+    const tbody = document.getElementById('result-section-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    const sectionsMap = {};
+
+    writtenExamState.questions.forEach((q, idx) => {
+        if (!sectionsMap[q.sectionName]) {
+            sectionsMap[q.sectionName] = { total: 0, correct: 0, wrong: 0, unattempted: 0 };
+        }
+        const s = sectionsMap[q.sectionName];
+        s.total++;
+
+        const uAns = writtenExamState.userAnswers[idx];
+        if (uAns === null) s.unattempted++;
+        else if (uAns === q.answer) s.correct++;
+        else s.wrong++;
+    });
+
+    Object.keys(sectionsMap).forEach(secName => {
+        const s = sectionsMap[secName];
+        const secPct = Math.round((s.correct / s.total) * 100);
+
+        let perfBadge = `<span class="category-badge cat-emerald">Excellent</span>`;
+        if (secPct < 50) perfBadge = `<span class="category-badge cat-rose">Weak</span>`;
+        else if (secPct < 75) perfBadge = `<span class="category-badge cat-gold">Moderate</span>`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>${secName}</strong></td>
+            <td>${s.total}</td>
+            <td style="color: var(--accent-emerald); font-weight:700;">${s.correct}</td>
+            <td style="color: var(--accent-rose);">${s.wrong}</td>
+            <td><strong>${secPct}%</strong></td>
+            <td>${perfBadge}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Display Result Screen
+function showResultScreen() {
+    document.getElementById('written-exam-active').classList.add('d-none');
+    document.getElementById('written-mode-select').classList.add('d-none');
+    document.getElementById('written-answer-review').classList.add('d-none');
+    document.getElementById('written-exam-result').classList.remove('d-none');
+}
+
+// Reset UI back to Mode Selector
+function resetWrittenExamUI() {
+    document.getElementById('written-exam-active').classList.add('d-none');
+    document.getElementById('written-exam-result').classList.add('d-none');
+    document.getElementById('written-answer-review').classList.add('d-none');
+    document.getElementById('written-mode-select').classList.remove('d-none');
+}
+
+// Open Answer Review View
+function openAnswerReview(filter = 'all') {
+    document.getElementById('written-exam-result').classList.add('d-none');
+    document.getElementById('written-answer-review').classList.remove('d-none');
+
+    renderAnswerReviewList(filter);
+}
+
+// Render Answer Review Questions List
+function renderAnswerReviewList(filter) {
+    const listContainer = document.getElementById('review-questions-list');
+    if (!listContainer) return;
+    listContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+
+    writtenExamState.questions.forEach((q, idx) => {
+        const uAns = writtenExamState.userAnswers[idx];
+        const isCorrect = (uAns === q.answer);
+        const isUnattempted = (uAns === null);
+        const isFlagged = writtenExamState.flagged.has(idx);
+
+        // Filter Check
+        if (filter === 'correct' && !isCorrect) return;
+        if (filter === 'incorrect' && (isCorrect || isUnattempted)) return;
+        if (filter === 'flagged' && !isFlagged) return;
+
+        let cardClass = 'review-item-card';
+        let statusTag = '';
+
+        if (isUnattempted) {
+            cardClass += ' unattempted';
+            statusTag = `<span class="q-status-tag">Not Attempted</span>`;
+        } else if (isCorrect) {
+            cardClass += ' correct';
+            statusTag = `<span class="q-status-tag answered">✓ Correct (+1)</span>`;
+        } else {
+            cardClass += ' incorrect';
+            statusTag = `<span class="q-status-tag" style="background: rgba(244,63,94,0.2); color: var(--accent-rose);">✗ Incorrect</span>`;
+        }
+
+        if (isFlagged) {
+            statusTag += ` <span class="q-status-tag flagged">🚩 Flagged</span>`;
+        }
+
+        const card = document.createElement('div');
+        card.className = cardClass;
+
+        let optionsHtml = '';
+        q.options.forEach((optText, optIdx) => {
+            let optClass = 'review-opt-box';
+            if (optIdx === q.answer) {
+                optClass += ' correct-choice';
+            } else if (optIdx === uAns && !isCorrect) {
+                optClass += ' user-wrong-choice';
+            }
+
+            optionsHtml += `
+                <div class="${optClass}">
+                    <strong>${letters[optIdx]}.</strong> ${optText}
+                    ${optIdx === q.answer ? ' ✓ (Correct Answer)' : ''}
+                    ${(optIdx === uAns && !isCorrect) ? ' ✗ (Your Answer)' : ''}
+                </div>
+            `;
+        });
+
+        card.innerHTML = `
+            <div class="review-q-header">
+                <span class="category-badge cat-msoffice">${q.sectionName.toUpperCase()}</span>
+                <div>${statusTag}</div>
+            </div>
+            <div class="review-q-text">
+                Question ${idx + 1}: ${q.question}
+            </div>
+            <div class="review-options-grid">
+                ${optionsHtml}
+            </div>
+            <div class="review-explanation-box">
+                <strong style="color: var(--accent-gold); display: block; margin-bottom: 4px;">Detailed Explanation & Note:</strong>
+                ${q.explanation}
+            </div>
+        `;
+
+        listContainer.appendChild(card);
+    });
+
+    if (listContainer.children.length === 0) {
+        listContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px;">No questions match the selected filter.</div>`;
+    }
+}
+
+// Fancy Custom Confirmation Modal
+function showFancyConfirm(title, message, iconType = 'confirm') {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('fancy-confirm-modal');
+        const iconEl = document.getElementById('fancy-confirm-icon');
+        const titleEl = document.getElementById('fancy-confirm-title');
+        const messageEl = document.getElementById('fancy-confirm-message');
+        const cancelBtn = document.getElementById('btn-fancy-confirm-cancel');
+        const actionBtn = document.getElementById('btn-fancy-confirm-action');
+
+        if (!modal) {
+            resolve(confirm(message));
+            return;
+        }
+
+        // Set content
+        titleEl.innerText = title;
+        messageEl.innerText = message;
+
+        // Set styles depending on actions
+        if (iconType === 'quit') {
+            iconEl.innerText = '✕';
+            iconEl.style.color = 'var(--accent-rose)';
+            actionBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            actionBtn.innerText = 'Exit Test';
+        } else if (iconType === 'submit') {
+            iconEl.innerText = '✓';
+            iconEl.style.color = 'var(--accent-emerald)';
+            actionBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            actionBtn.innerText = 'Submit Test';
+        } else {
+            iconEl.innerText = '❓';
+            iconEl.style.color = 'var(--accent-gold)';
+            actionBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            actionBtn.innerText = 'Yes, Proceed';
+        }
+
+        // Show modal
+        modal.classList.remove('d-none');
+
+        const handleCancel = () => {
+            modal.classList.add('d-none');
+            cleanup();
+            resolve(false);
+        };
+
+        const handleAction = () => {
+            modal.classList.add('d-none');
+            cleanup();
+            resolve(true);
+        };
+
+        const cleanup = () => {
+            cancelBtn.removeEventListener('click', handleCancel);
+            actionBtn.removeEventListener('click', handleAction);
+        };
+
+        cancelBtn.addEventListener('click', handleCancel);
+        actionBtn.addEventListener('click', handleAction);
+    });
 }
