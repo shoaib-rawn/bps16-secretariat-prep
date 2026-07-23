@@ -831,16 +831,24 @@ const TYPING_PASSAGES = [
 // 3. Motivational Quotes & Guidance
 const MOTIVATION_INSIGHTS = [
     {
-        quote: "Your current shorthand speed of 120 WPM is exceptionally good. Only a tiny fraction of applicants can achieve this speed. Protect this asset: do 30 minutes of dictation daily, and focus heavily on translation accuracy onto the keyboard. The BPS-16 post is within your reach.",
-        author: "Personal Coach"
-    },
-    {
-        quote: "BPS-16 at the President's Secretariat (Aiwan-e-Sadr) is not just a job; it is a prestigious career path with high security, excellent pension benefits, and proximity to the governance center. Maintaining 50 WPM and building MS Office mastery will secure your success.",
-        author: "Secretariat Protocol Coach"
-    },
-    {
-        quote: "Success is the sum of small efforts, repeated day in and day out. 45 days of focused discipline will separate you from the competition. Today's MS Office Tip is your stepping stone.",
+        quote: "Success is the sum of small efforts, repeated day in and day out. 40 days of focused discipline will separate you from the competition.",
         author: "Robert Collier"
+    },
+    {
+        quote: "The only limit to our realization of tomorrow will be our doubts of today.",
+        author: "Franklin D. Roosevelt"
+    },
+    {
+        quote: "It always seems impossible until it's done. Stay dedicated to your daily practice.",
+        author: "Nelson Mandela"
+    },
+    {
+        quote: "Quality is not an act, it is a habit. Make your practice drills flawless.",
+        author: "Aristotle"
+    },
+    {
+        quote: "Do not wait; the time will never be 'just right.' Start where you stand, and work with whatever tools you may have at your command.",
+        author: "Napoleon Hill"
     }
 ];
 
@@ -899,7 +907,13 @@ function setupTabs() {
             
             tab.classList.add('active');
             const targetId = tab.dataset.tab;
-            document.getElementById(targetId).classList.add('active');
+            const targetEl = document.getElementById(targetId);
+            targetEl.classList.add('active');
+            
+            // Smoothly scroll to active section on mobile/tablet screens
+            if (window.innerWidth <= 1024) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
             
             if (targetId === 'analytics') {
                 renderCharts();
