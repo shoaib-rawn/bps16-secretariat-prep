@@ -932,6 +932,9 @@ function setupTabs() {
                 setTimeout(() => {
                     document.getElementById('typing-passage-container')?.focus();
                 }, 50);
+            } else if (targetId === 'written') {
+                document.getElementById('prep-day-selector').classList.add('d-none');
+                document.getElementById('prep-subject-grid').classList.remove('d-none');
             }
         });
     });
@@ -2714,7 +2717,13 @@ function initWrittenExam() {
     });
 
     document.getElementById('btn-prev-q')?.addEventListener('click', () => navigateQuestion(-1));
-    document.getElementById('btn-next-q')?.addEventListener('click', () => navigateQuestion(1));
+    document.getElementById('btn-next-q')?.addEventListener('click', () => {
+        if (writtenExamState.currentIndex === writtenExamState.questions.length - 1) {
+            confirmSubmitExam();
+        } else {
+            navigateQuestion(1);
+        }
+    });
     document.getElementById('btn-flag-q')?.addEventListener('click', toggleFlagCurrentQuestion);
     document.getElementById('btn-clear-q')?.addEventListener('click', clearCurrentAnswer);
     document.getElementById('btn-submit-exam-early')?.addEventListener('click', confirmSubmitExam);
@@ -2735,6 +2744,7 @@ function initWrittenExam() {
         }
     });
     document.getElementById('btn-retake-exam')?.addEventListener('click', resetWrittenExamUI);
+    document.getElementById('btn-result-back')?.addEventListener('click', resetWrittenExamUI);
 
     document.getElementById('btn-review-answers')?.addEventListener('click', () => openAnswerReview('all'));
     document.getElementById('btn-back-to-results')?.addEventListener('click', showResultScreen);
@@ -3038,10 +3048,8 @@ function renderCurrentQuestion() {
     if (nextBtn) {
         if (idx === writtenExamState.questions.length - 1) {
             nextBtn.innerText = 'Submit Exam ✓';
-            nextBtn.onclick = confirmSubmitExam;
         } else {
             nextBtn.innerText = 'Next Question →';
-            nextBtn.onclick = () => navigateQuestion(1);
         }
     }
 
@@ -3538,6 +3546,9 @@ function handleNavigationState(stateObj) {
                 setTimeout(() => {
                     document.getElementById('typing-passage-container')?.focus();
                 }, 50);
+            } else if (stateObj.tabId === 'written') {
+                document.getElementById('prep-day-selector').classList.add('d-none');
+                document.getElementById('prep-subject-grid').classList.remove('d-none');
             }
         }
     } else if (stateObj.type === 'day-selector') {
