@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BPS-16 Assistant Private Secretary Prep Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -29,9 +29,9 @@
                 <span>🟢</span> <span>Good! You are on a Desktop/Laptop PC. Best practice experience enabled.</span>
             </div>
             <div class="mobile-banner-msg" style="width: 100%; display: none; align-items: center; gap: 6px;">
-                <span style="white-space: nowrap; display: flex; align-items: center; gap: 4px;">📢 <strong>Notice:</strong></span>
-                <marquee behavior="scroll" direction="left" scrollamount="4" style="width: 100%; font-family: var(--font-sans);">
-                    Attention Candidates: For the best learning and practice experience, please use a Laptop or Desktop PC to attempt timed mock exams, view complex protocol layouts, and practice touch typing drills.
+                <span class="blink-text" style="white-space: nowrap; display: flex; align-items: center; gap: 4px; color: var(--accent-rose);">⚠️ <strong>Notice:</strong></span>
+                <marquee behavior="scroll" direction="left" scrollamount="4" style="width: 100%; font-family: var(--font-sans); font-weight: 600;">
+                    Please for good learning open this website in laptop thanks
                 </marquee>
             </div>
         </div>
@@ -169,23 +169,8 @@
                     </div>
                 </div>
 
-                <!-- Right Side: Today's Quick Tip & Speed Logger -->
+                <!-- Right Side: Speed Logger -->
                 <div style="display: flex; flex-direction: column; gap: 25px;">
-                    <div class="card">
-                        <div class="card-title">Today's Syllabus Concept</div>
-                        <div id="dash-today-category" class="category-badge cat-msoffice" style="margin-bottom: 10px;">
-                            MS WORD</div>
-                        <h4 id="dash-today-title" style="margin-bottom: 8px;">Day 1: Section Breaks vs. Page Breaks</h4>
-                        <p id="dash-today-desc"
-                            style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">
-                            Section breaks decouple formatting between chapters. Essential for rotating horizontal
-                            columns...
-                        </p>
-                        <button class="btn-primary" onclick="document.querySelector('[data-tab=syllabus]').click();">
-                            Go to Study Center
-                        </button>
-                    </div>
-
                     <div class="card">
                         <div class="card-title">Speed Logger</div>
                         <form id="log-speed-form">

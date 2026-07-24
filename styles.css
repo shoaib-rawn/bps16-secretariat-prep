@@ -1428,6 +1428,15 @@ header::before {
     display: none !important;
 }
 
+.blink-text {
+    animation: blinkGlow 1.2s infinite alternate;
+}
+
+@keyframes blinkGlow {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
     .grid-dashboard, .analytics-grid, .grid-syllabus {
@@ -1541,6 +1550,10 @@ header::before {
     .header-stats {
         width: 100%;
         justify-content: center;
+    }
+
+    .form-control {
+        font-size: 16px !important;
     }
 
     .written-syllabus-grid {

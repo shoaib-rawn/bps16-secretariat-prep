@@ -894,7 +894,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initProtocolCenter();
     initWrittenExam();
     updateCountdown();
-    showToast("BPS-16 40-Day Prep Portal & 100 Marks Written Test Loaded!");
 });
 
 // Tab Switch Logic
@@ -904,7 +903,7 @@ function setupTabs() {
     
     // Set initial history state if empty
     if (!history.state) {
-        history.replaceState({ type: 'tab', tabId: 'dashboard' }, '', '#dashboard');
+        history.replaceState({ type: 'tab', tabId: 'dashboard' }, '', window.location.pathname);
     }
 
     tabs.forEach(tab => {
@@ -924,7 +923,7 @@ function setupTabs() {
             
             // Push history state
             if (!historyStateUpdateInProgress) {
-                history.pushState({ type: 'tab', tabId: targetId }, '', `#${targetId}`);
+                history.pushState({ type: 'tab', tabId: targetId }, '', window.location.pathname);
             }
             
             if (targetId === 'analytics') {
@@ -944,13 +943,6 @@ function initDashboard() {
     const quoteObj = MOTIVATION_INSIGHTS[Math.floor(Math.random() * MOTIVATION_INSIGHTS.length)];
     document.getElementById('m-quote').innerText = `"${quoteObj.quote}"`;
     document.getElementById('m-author').innerText = `- ${quoteObj.author}`;
-    
-    // Quick tip card header on dashboard
-    const todayTip = SYLLABUS[state.currentDay - 1] || SYLLABUS[0];
-    document.getElementById('dash-today-title').innerText = `Day ${todayTip.day}: ${todayTip.title}`;
-    document.getElementById('dash-today-desc').innerText = todayTip.description.replace(/\*\*/g, '').substring(0, 160) + "...";
-    document.getElementById('dash-today-category').innerText = todayTip.category.toUpperCase();
-    document.getElementById('dash-today-category').className = `category-badge cat-${todayTip.category}`;
     
     // Log submission handling
     const logForm = document.getElementById('log-speed-form');
@@ -1693,16 +1685,12 @@ function initProtocolCenter() {
 
 // 9. Countdown to Skills & Written Test (40-Day Target)
 function updateCountdown() {
-    // 40 Days Target from current system date
-    const today = new Date();
-    const testDate = new Date(today.getTime() + (40 * 24 * 60 * 60 * 1000));
-    
-    const diffTime = Math.abs(testDate - today);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const completedCount = state.completedDays ? state.completedDays.length : 0;
+    const daysLeft = Math.max(0, 40 - completedCount);
     
     const countdownEl = document.getElementById('countdown-days');
     if (countdownEl) {
-        countdownEl.innerText = diffDays > 0 ? diffDays : "40";
+        countdownEl.innerText = daysLeft;
     }
 }
 
@@ -2738,7 +2726,7 @@ function initWrittenExam() {
         renderCurrentQuestion();
     });
     document.getElementById('btn-quit-exam')?.addEventListener('click', async () => {
-        const confirmed = await showFancyConfirm("Exit Test", "Are you sure you want to exit the current test? Your progress will not be saved.", "quit");
+        const confirmed = await showFancyConfirm("Exit Test", "Are you sure you want to exit the current test? Your progress will not be saved.", "quit", "Yes, Exit", "No");
         if (confirmed) {
             if (writtenExamState.timerInterval) clearInterval(writtenExamState.timerInterval);
             writtenExamState.active = false;
@@ -2761,7 +2749,7 @@ function initWrittenExam() {
     });
 
     document.getElementById('btn-clear-exam-history')?.addEventListener('click', async () => {
-        const confirmed = await showFancyConfirm("Clear History", "Are you sure you want to clear all recorded exam attempts? This cannot be undone.", "quit");
+        const confirmed = await showFancyConfirm("Clear History", "Are you sure you want to clear all recorded exam attempts? This cannot be undone.", "quit", "Yes, Clear", "No");
         if (confirmed) {
             localStorage.removeItem('bps16_written_history');
             loadExamHistoryTable();
@@ -2782,7 +2770,7 @@ function initWrittenExam() {
             
             // Push history state
             if (!historyStateUpdateInProgress) {
-                history.pushState({ type: 'day-selector', subject: subject, subjectName: subjectName }, '', `#days-${subject}`);
+                history.pushState({ type: 'day-selector', subject: subject, subjectName: subjectName }, '', window.location.pathname);
             }
 
             // Build Days Grid
@@ -2815,7 +2803,7 @@ function initWrittenExam() {
 // Start Written Exam (Full 100 Marks, Model Papers, Subject Drill, or Daily 8 MCQs)
 function startWrittenExam(mode, param = null) {
     if (!historyStateUpdateInProgress) {
-        history.pushState({ type: 'exam', examMode: mode, param: param }, '', '#exam');
+        history.pushState({ type: 'exam', examMode: mode, param: param }, '', window.location.pathname);
     }
 
     writtenExamState.mode = mode;
@@ -3137,7 +3125,7 @@ async function confirmSubmitExam() {
         msg = `You have ${unanswered} unanswered question(s). Are you sure you want to submit now?`;
     }
 
-    const confirmed = await showFancyConfirm("Submit Written Exam", msg, "submit");
+    const confirmed = await showFancyConfirm("Submit Written Exam", msg, "submit", "Yes, Submit", "No");
     if (confirmed) {
         submitWrittenExam();
     }
@@ -3439,7 +3427,7 @@ function renderAnswerReviewList(filter) {
 }
 
 // Fancy Custom Confirmation Modal
-function showFancyConfirm(title, message, iconType = 'confirm') {
+function showFancyConfirm(title, message, iconType = 'confirm', actionLabel = '', cancelLabel = 'Cancel') {
     return new Promise((resolve) => {
         const modal = document.getElementById('fancy-confirm-modal');
         const iconEl = document.getElementById('fancy-confirm-icon');
@@ -3456,23 +3444,24 @@ function showFancyConfirm(title, message, iconType = 'confirm') {
         // Set content
         titleEl.innerText = title;
         messageEl.innerText = message;
+        cancelBtn.innerText = cancelLabel;
 
         // Set styles depending on actions
         if (iconType === 'quit') {
             iconEl.innerText = '✕';
             iconEl.style.color = 'var(--accent-rose)';
             actionBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-            actionBtn.innerText = 'Exit Test';
+            actionBtn.innerText = actionLabel || 'Exit Test';
         } else if (iconType === 'submit') {
             iconEl.innerText = '✓';
             iconEl.style.color = 'var(--accent-emerald)';
             actionBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-            actionBtn.innerText = 'Submit Test';
+            actionBtn.innerText = actionLabel || 'Submit Test';
         } else {
             iconEl.innerText = '❓';
             iconEl.style.color = 'var(--accent-gold)';
             actionBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-            actionBtn.innerText = 'Yes, Proceed';
+            actionBtn.innerText = actionLabel || 'Yes, Proceed';
         }
 
         // Show modal
